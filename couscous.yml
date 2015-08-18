@@ -1,0 +1,17 @@
+template:
+    url: https://github.com/CouscousPHP/Template-Light.git
+
+baseUrl: http://gnugat.github.io/search-engine
+
+title: SearchEngine
+subTitle: A POC library to handle interrogatory messages
+
+github:
+    user: gnugat
+    repo: search-engine
+
+menu:
+    items:
+        home:
+            text: Home
+            relativeUrl:
