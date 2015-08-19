@@ -69,6 +69,6 @@ class CriteriaFactory
         $paginating = $this->paginatingFactory->fromQueryParameters($queryParameters);
         $orderings = $this->orderingsFactory->fromQueryParameters($queryParameters);
 
-        return Criteria::forSearchEngine($resourceName, $embeding, $filtering, $paginating, $orderings);
+        return new Criteria($resourceName, $embeding, $filtering, $paginating, $orderings);
     }
 }
