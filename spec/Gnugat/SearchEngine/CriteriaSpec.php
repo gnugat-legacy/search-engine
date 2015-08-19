@@ -23,13 +23,13 @@ class CriteriaSpec extends ObjectBehavior
 
     function let(Embeding $embeding, Filtering $filtering, Ordering $ordering, Paginating $paginating)
     {
-        $this->beConstructedThrough('forSearchEngine', array(
+        $this->beConstructedWith(
             self::RESOURCE_NAME,
             $embeding,
             $filtering,
             $paginating,
             array($ordering)
-        ));
+        );
     }
 
     function it_has_resource_name()

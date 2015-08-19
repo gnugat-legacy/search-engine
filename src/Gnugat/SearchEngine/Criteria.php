@@ -42,10 +42,6 @@ class Criteria
      */
     private $orderings;
 
-    private function __construct()
-    {
-    }
-
     /**
      * @param string     $resourceName
      * @param Embeding   $embeding
@@ -53,22 +49,18 @@ class Criteria
      * @param Paginating $paginating
      * @param array      $orderings
      */
-    public static function forSearchEngine(
+    public function __construct(
         $resourceName,
         Embeding $embeding,
         Filtering $filtering,
         Paginating $paginating,
         array $orderings
     ) {
-        $criteria = new self();
-
-        $criteria->resourceName = $resourceName;
-        $criteria->embeding = $embeding;
-        $criteria->filtering = $filtering;
-        $criteria->paginating = $paginating;
-        $criteria->orderings = $orderings;
-
-        return $criteria;
+        $this->resourceName = $resourceName;
+        $this->embeding = $embeding;
+        $this->filtering = $filtering;
+        $this->paginating = $paginating;
+        $this->orderings = $orderings;
     }
 
     /**
