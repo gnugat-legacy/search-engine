@@ -11,7 +11,24 @@
 
 namespace Gnugat\SearchEngine\Builder;
 
-interface OrderingsBuilder
+use Gnugat\SearchEngine\QueryBuilder;
+use Gnugat\SearchEngine\ResourceDefinition;
+
+class OrderingsBuilder
 {
-    public function build($argument1, $argument2, $argument3);
+    /**
+     * @param QueryBuilder       $queryBuilder
+     * @param ResourceDefinition $resourceDefinition
+     * @param array              $orderings
+     */
+    public function build(QueryBuilder $queryBuilder, ResourceDefinition $resourceDefinition, array $orderings)
+    {
+        foreach ($orderings as $ordering) {
+            $field = $ordering->getField();
+            if (!$resourceDefinition->hasField($field)) {
+                continue;
+            }
+            $queryBuilder->addOrderBy($field, $ordering->getDirection());
+        }
+    }
 }

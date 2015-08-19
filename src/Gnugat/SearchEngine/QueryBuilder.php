@@ -25,6 +25,12 @@ interface QueryBuilder
     public function from($resource, $alias = null);
 
     /**
+     * @param string $field
+     * @param string $direction
+     */
+    public function addOrderBy($field, $direction);
+
+    /**
      * @return \Traversable Depending on the implementation, could be an array or an iterator.
      */
     public function execute();

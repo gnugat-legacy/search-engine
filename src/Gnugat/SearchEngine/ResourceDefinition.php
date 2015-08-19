@@ -13,4 +13,10 @@ namespace Gnugat\SearchEngine;
 
 interface ResourceDefinition
 {
+    /**
+     * @param string $field
+     *
+     * @return bool
+     */
+    public function hasField($argument1);
 }
