@@ -13,6 +13,9 @@ namespace Gnugat\SearchEngine\Criteria;
 
 class Paginating
 {
+    const DEFAULT_CURRENT_PAGE = 1;
+    const DEFAULT_ITEMS_PER_PAGE = 10;
+
     /**
      * @var int
      */
@@ -30,7 +33,13 @@ class Paginating
     public function __construct($currentPage, $itemsPerPage)
     {
         $this->currentPage = (int) $currentPage;
+        if ($this->currentPage <= 0) {
+            $this->currentPage = self::DEFAULT_CURRENT_PAGE;
+        }
         $this->itemsPerPage = (int) $itemsPerPage;
+        if ($this->itemsPerPage <= 0) {
+            $this->itemsPerPage = self::DEFAULT_ITEMS_PER_PAGE;
+        }
         $this->offset = $this->currentPage * $this->itemsPerPage - $this->itemsPerPage;
     }
 

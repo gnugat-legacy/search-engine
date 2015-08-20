@@ -11,7 +11,7 @@
 
 namespace spec\Gnugat\SearchEngine\Criteria;
 
-use Gnugat\SearchEngine\Criteria\PaginatingFactory;
+use Gnugat\SearchEngine\Criteria\Paginating;
 use PhpSpec\ObjectBehavior;
 
 class PaginatingFactorySpec extends ObjectBehavior
@@ -24,8 +24,8 @@ class PaginatingFactorySpec extends ObjectBehavior
         $paginating = $this->fromQueryParameters(array(
         ));
 
-        $paginating->getCurrentPage()->shouldBe(PaginatingFactory::DEFAULT_CURRENT_PAGE);
-        $paginating->getItemsPerPage()->shouldBe(PaginatingFactory::DEFAULT_ITEMS_PER_PAGE);
+        $paginating->getCurrentPage()->shouldBe(Paginating::DEFAULT_CURRENT_PAGE);
+        $paginating->getItemsPerPage()->shouldBe(Paginating::DEFAULT_ITEMS_PER_PAGE);
     }
 
     function it_extracts_current_page_and_items_per_page_from_query_parameters()

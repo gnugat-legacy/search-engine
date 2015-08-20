@@ -13,9 +13,6 @@ namespace Gnugat\SearchEngine\Criteria;
 
 class PaginatingFactory
 {
-    const DEFAULT_CURRENT_PAGE = 1;
-    const DEFAULT_ITEMS_PER_PAGE = 10;
-
     /**
      * @param array $queryParameters
      *
@@ -23,11 +20,11 @@ class PaginatingFactory
      */
     public function fromQueryParameters(array $queryParameters)
     {
-        $currentPage = self::DEFAULT_CURRENT_PAGE;
+        $currentPage = Paginating::DEFAULT_CURRENT_PAGE;
         if (isset($queryParameters['page'])) {
             $currentPage = (int) $queryParameters['page'];
         }
-        $maximumResults = self::DEFAULT_ITEMS_PER_PAGE;
+        $maximumResults = Paginating::DEFAULT_ITEMS_PER_PAGE;
         if (isset($queryParameters['per_page'])) {
             $maximumResults = (int) $queryParameters['per_page'];
         }

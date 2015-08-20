@@ -11,6 +11,7 @@
 
 namespace spec\Gnugat\SearchEngine\Criteria;
 
+use Gnugat\SearchEngine\Criteria\Paginating;
 use PhpSpec\ObjectBehavior;
 
 class PaginatingSpec extends ObjectBehavior
@@ -29,6 +30,13 @@ class PaginatingSpec extends ObjectBehavior
         $this->getCurrentPage()->shouldBe(self::CURRENT_PAGE);
     }
 
+    function it_forces_current_page_to_be_a_strictly_positive_integer()
+    {
+        $this->beConstructedWith(-42, self::ITEMS_PER_PAGE);
+
+        $this->getCurrentPage()->shouldBe(Paginating::DEFAULT_CURRENT_PAGE);
+    }
+
     function it_has_offset()
     {
         $this->getOffset()->shouldBe(self::OFFSET);
@@ -37,5 +45,12 @@ class PaginatingSpec extends ObjectBehavior
     function it_has_items_per_page()
     {
         $this->getItemsPerPage()->shouldBe(self::ITEMS_PER_PAGE);
+    }
+
+    function it_forces_items_per_page_to_be_a_strictly_positive_integer()
+    {
+        $this->beConstructedWith(self::CURRENT_PAGE, -42);
+
+        $this->getItemsPerPage()->shouldBe(Paginating::DEFAULT_ITEMS_PER_PAGE);
     }
 }
