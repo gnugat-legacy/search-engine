@@ -14,6 +14,7 @@ namespace Gnugat\SearchEngine;
 use Gnugat\SearchEngine\Builder\FilteringBuilder;
 use Gnugat\SearchEngine\Builder\OrderingsBuilder;
 use Gnugat\SearchEngine\Builder\PaginatingBuilder;
+use Gnugat\SearchEngine\Builder\QueryBuilderFactory;
 use Gnugat\SearchEngine\Builder\SelectBuilder;
 
 class SearchEngine

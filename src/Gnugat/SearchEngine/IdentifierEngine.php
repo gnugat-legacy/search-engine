@@ -12,6 +12,7 @@
 namespace Gnugat\SearchEngine;
 
 use Gnugat\SearchEngine\Builder\FilteringBuilder;
+use Gnugat\SearchEngine\Builder\QueryBuilderFactory;
 use Gnugat\SearchEngine\Builder\SelectBuilder;
 
 class IdentifierEngine

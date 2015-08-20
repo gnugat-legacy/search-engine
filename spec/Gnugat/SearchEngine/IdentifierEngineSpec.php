@@ -14,8 +14,8 @@ namespace spec\Gnugat\SearchEngine;
 use Gnugat\SearchEngine\Build;
 use Gnugat\SearchEngine\Builder\FilteringBuilder;
 use Gnugat\SearchEngine\Builder\QueryBuilder;
+use Gnugat\SearchEngine\Builder\QueryBuilderFactory;
 use Gnugat\SearchEngine\Builder\SelectBuilder;
-use Gnugat\SearchEngine\QueryBuilderFactory;
 use Gnugat\SearchEngine\ResourceDefinition;
 use PhpSpec\ObjectBehavior;
 
