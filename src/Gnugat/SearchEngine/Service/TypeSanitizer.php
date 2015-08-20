@@ -11,7 +11,22 @@
 
 namespace Gnugat\SearchEngine\Service;
 
-interface TypeSanitizer
+use Gnugat\SearchEngine\ResourceDefinition;
+
+class TypeSanitizer
 {
-    public function sanitize($argument1, $argument2);
+    /**
+     * @param string $value
+     * @param mixed  $type
+     *
+     * @return mixed
+     */
+    public function sanitize($value, $type)
+    {
+        if (ResourceDefinition::TYPE_INTEGER === $type) {
+            return (int) $value;
+        }
+
+        return $value;
+    }
 }
