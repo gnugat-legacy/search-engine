@@ -87,7 +87,7 @@ class SearchEngine
         $queryBuilder->from($resourceName);
         $this->filteringBuilder->build($queryBuilder, $resourceDefinition, $criteria->getFiltering());
 
-        $queryBuilder->select('COUNT(id) AS total');
+        $queryBuilder->addSelect('COUNT(id) AS total');
         $countResults = $queryBuilder->fetchFirst();
         $totalElements = (int) $countResults['total'];
         $totalPages = (int) ceil($totalElements / $perPage);

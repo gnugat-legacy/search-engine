@@ -12,7 +12,6 @@
 namespace Gnugat\SearchEngine\Builder;
 
 use Gnugat\SearchEngine\Criteria;
-use Gnugat\SearchEngine\QueryBuilder;
 use Gnugat\SearchEngine\ResourceDefinition;
 
 interface SelectBuilder

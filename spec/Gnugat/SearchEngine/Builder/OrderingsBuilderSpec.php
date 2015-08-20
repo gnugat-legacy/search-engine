@@ -11,8 +11,8 @@
 
 namespace spec\Gnugat\SearchEngine\Builder;
 
+use Gnugat\SearchEngine\Builder\QueryBuilder;
 use Gnugat\SearchEngine\Criteria\Ordering;
-use Gnugat\SearchEngine\QueryBuilder;
 use Gnugat\SearchEngine\ResourceDefinition;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;

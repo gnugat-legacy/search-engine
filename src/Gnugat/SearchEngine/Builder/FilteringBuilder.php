@@ -12,7 +12,6 @@
 namespace Gnugat\SearchEngine\Builder;
 
 use Gnugat\SearchEngine\Criteria\Filtering;
-use Gnugat\SearchEngine\QueryBuilder;
 use Gnugat\SearchEngine\ResourceDefinition;
 
 class FilteringBuilder

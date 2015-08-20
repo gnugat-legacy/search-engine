@@ -11,7 +11,7 @@
 
 namespace spec\Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
 
-use Gnugat\SearchEngine\QueryBuilder;
+use Gnugat\SearchEngine\Builder\QueryBuilder;
 use Gnugat\SearchEngine\ResourceDefinition;
 use Gnugat\SearchEngine\Service\TypeSanitizer;
 use PhpSpec\ObjectBehavior;
@@ -42,8 +42,8 @@ class RangeFilteringBuilderStrategySpec extends ObjectBehavior
         ResourceDefinition $resourceDefinition
     ) {
         $resourceDefinition->getFieldType('field')->shouldNotBeCalled();
-        $queryBuilder->andWhere('field IN (:fields)')->shouldNotBeCalled();
-        $queryBuilder->setParameter(':fields', Argument::any(), ResourceDefinition::TYPE_ARRAY)->shouldNotBeCalled();
+        $queryBuilder->addWhere('field IN (:fields)')->shouldNotBeCalled();
+        $queryBuilder->addParameter(':fields', Argument::any(), ResourceDefinition::TYPE_ARRAY)->shouldNotBeCalled();
 
         $this->build($queryBuilder, $resourceDefinition, 'fields', '');
     }
@@ -53,8 +53,8 @@ class RangeFilteringBuilderStrategySpec extends ObjectBehavior
         ResourceDefinition $resourceDefinition
     ) {
         $resourceDefinition->getFieldType('field')->shouldNotBeCalled();
-        $queryBuilder->andWhere('field IN (:fields)')->shouldNotBeCalled();
-        $queryBuilder->setParameter(':fields', Argument::any(), ResourceDefinition::TYPE_ARRAY)->shouldNotBeCalled();
+        $queryBuilder->addWhere('field IN (:fields)')->shouldNotBeCalled();
+        $queryBuilder->addParameter(':fields', Argument::any(), ResourceDefinition::TYPE_ARRAY)->shouldNotBeCalled();
 
         $this->build($queryBuilder, $resourceDefinition, 'fields', ',');
     }
@@ -66,8 +66,8 @@ class RangeFilteringBuilderStrategySpec extends ObjectBehavior
     ) {
         $resourceDefinition->getFieldType('field')->willReturn(ResourceDefinition::TYPE_INTEGER);
         $typeSanitizer->sanitize('42', ResourceDefinition::TYPE_INTEGER)->willReturn(42);
-        $queryBuilder->andWhere('field IN (:fields)')->shouldBeCalled();
-        $queryBuilder->setParameter(':fields', array(42), ResourceDefinition::TYPE_ARRAY)->shouldBeCalled();
+        $queryBuilder->addWhere('field IN (:fields)')->shouldBeCalled();
+        $queryBuilder->addParameter(':fields', array(42), ResourceDefinition::TYPE_ARRAY)->shouldBeCalled();
 
         $this->build($queryBuilder, $resourceDefinition, 'fields', '42');
     }
@@ -80,8 +80,8 @@ class RangeFilteringBuilderStrategySpec extends ObjectBehavior
         $resourceDefinition->getFieldType('field')->willReturn(ResourceDefinition::TYPE_INTEGER);
         $typeSanitizer->sanitize('42', ResourceDefinition::TYPE_INTEGER)->willReturn(42);
         $typeSanitizer->sanitize('23', ResourceDefinition::TYPE_INTEGER)->willReturn(23);
-        $queryBuilder->andWhere('field IN (:fields)')->shouldBeCalled();
-        $queryBuilder->setParameter(':fields', array(42, 23), ResourceDefinition::TYPE_ARRAY)->shouldBeCalled();
+        $queryBuilder->addWhere('field IN (:fields)')->shouldBeCalled();
+        $queryBuilder->addParameter(':fields', array(42, 23), ResourceDefinition::TYPE_ARRAY)->shouldBeCalled();
 
         $this->build($queryBuilder, $resourceDefinition, 'fields', '42,23');
     }

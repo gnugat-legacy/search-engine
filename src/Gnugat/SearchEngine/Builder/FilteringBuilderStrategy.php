@@ -11,7 +11,6 @@
 
 namespace Gnugat\SearchEngine\Builder;
 
-use Gnugat\SearchEngine\QueryBuilder;
 use Gnugat\SearchEngine\ResourceDefinition;
 
 interface FilteringBuilderStrategy

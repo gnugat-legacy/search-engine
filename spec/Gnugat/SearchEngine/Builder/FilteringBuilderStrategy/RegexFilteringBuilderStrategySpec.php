@@ -11,7 +11,7 @@
 
 namespace spec\Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
 
-use Gnugat\SearchEngine\QueryBuilder;
+use Gnugat\SearchEngine\Builder\QueryBuilder;
 use Gnugat\SearchEngine\ResourceDefinition;
 use PhpSpec\ObjectBehavior;
 
@@ -32,8 +32,8 @@ class RegexFilteringBuilderStrategySpec extends ObjectBehavior
 
     function it_builds_a_regex_statement(QueryBuilder $queryBuilder, ResourceDefinition $resourceDefinition)
     {
-        $queryBuilder->andWhere('field ~* :field')->shouldBeCalled();
-        $queryBuilder->setParameter(':field', '.*value.*', ResourceDefinition::TYPE_STRING)->shouldBeCalled();
+        $queryBuilder->addWhere('field ~* :field')->shouldBeCalled();
+        $queryBuilder->addParameter(':field', '.*value.*', ResourceDefinition::TYPE_STRING)->shouldBeCalled();
 
         $this->build($queryBuilder, $resourceDefinition, 'field', 'value');
     }

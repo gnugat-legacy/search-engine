@@ -13,7 +13,7 @@ namespace Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
 
 use Doctrine\Common\Inflector\Inflector;
 use Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
-use Gnugat\SearchEngine\QueryBuilder;
+use Gnugat\SearchEngine\Builder\QueryBuilder;
 use Gnugat\SearchEngine\ResourceDefinition;
 use Gnugat\SearchEngine\Service\TypeSanitizer;
 
@@ -57,7 +57,7 @@ class RangeFilteringBuilderStrategy implements FilteringBuilderStrategy
         foreach ($rawValues as $rawValue) {
             $parameterValues[] = $this->typeSanitizer->sanitize($rawValue, $type);
         }
-        $queryBuilder->andWhere("$field IN ($parameterName)");
-        $queryBuilder->setParameter($parameterName, $parameterValues, ResourceDefinition::TYPE_ARRAY);
+        $queryBuilder->addWhere("$field IN ($parameterName)");
+        $queryBuilder->addParameter($parameterName, $parameterValues, ResourceDefinition::TYPE_ARRAY);
     }
 }

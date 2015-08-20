@@ -12,7 +12,7 @@
 namespace Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
 
 use Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
-use Gnugat\SearchEngine\QueryBuilder;
+use Gnugat\SearchEngine\Builder\QueryBuilder;
 use Gnugat\SearchEngine\ResourceDefinition;
 use Gnugat\SearchEngine\Service\TypeSanitizer;
 
@@ -47,7 +47,7 @@ class StrictComparisonFilteringBuilderStrategy implements FilteringBuilderStrate
         $parameterName = ":$field";
         $type = $resourceDefinition->getFieldType($field);
         $value = $this->typeSanitizer->sanitize($value, $type);
-        $queryBuilder->andWhere("$field = $parameterName");
-        $queryBuilder->setParameter($parameterName, $value, $type);
+        $queryBuilder->addWhere("$field = $parameterName");
+        $queryBuilder->addParameter($parameterName, $value, $type);
     }
 }

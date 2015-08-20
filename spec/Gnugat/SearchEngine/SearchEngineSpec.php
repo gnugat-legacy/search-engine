@@ -15,8 +15,8 @@ use Gnugat\SearchEngine\Build;
 use Gnugat\SearchEngine\Builder\FilteringBuilder;
 use Gnugat\SearchEngine\Builder\OrderingsBuilder;
 use Gnugat\SearchEngine\Builder\PaginatingBuilder;
+use Gnugat\SearchEngine\Builder\QueryBuilder;
 use Gnugat\SearchEngine\Builder\SelectBuilder;
-use Gnugat\SearchEngine\QueryBuilder;
 use Gnugat\SearchEngine\QueryBuilderFactory;
 use Gnugat\SearchEngine\ResourceDefinition;
 use PhpSpec\ObjectBehavior;
@@ -79,7 +79,7 @@ class SearchEngineSpec extends ObjectBehavior
         $queryBuilder->from(self::RESOURCE_NAME)->shouldBeCalled();
         $filteringBuilder->build($queryBuilder, $resourceDefinition, $criteria->getFiltering())->shouldBeCalled();
 
-        $queryBuilder->select('COUNT(id) AS total')->shouldBeCalled();
+        $queryBuilder->addSelect('COUNT(id) AS total')->shouldBeCalled();
         $queryBuilder->fetchFirst()->willReturn($countResult);
 
         $selectBuilder->build($queryBuilder, $resourceDefinition, $criteria)->shouldBeCalled();

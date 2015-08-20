@@ -12,7 +12,7 @@
 namespace Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
 
 use Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
-use Gnugat\SearchEngine\QueryBuilder;
+use Gnugat\SearchEngine\Builder\QueryBuilder;
 use Gnugat\SearchEngine\ResourceDefinition;
 
 class RegexFilteringBuilderStrategy implements FilteringBuilderStrategy
@@ -30,7 +30,7 @@ class RegexFilteringBuilderStrategy implements FilteringBuilderStrategy
      */
     public function build(QueryBuilder $queryBuilder, ResourceDefinition $resourceDefinition, $field, $value)
     {
-        $queryBuilder->andWhere("$field ~* :$field");
-        $queryBuilder->setParameter(":$field", ".*$value.*", ResourceDefinition::TYPE_STRING);
+        $queryBuilder->addWhere("$field ~* :$field");
+        $queryBuilder->addParameter(":$field", ".*$value.*", ResourceDefinition::TYPE_STRING);
     }
 }

@@ -11,7 +11,7 @@
 
 namespace spec\Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
 
-use Gnugat\SearchEngine\QueryBuilder;
+use Gnugat\SearchEngine\Builder\QueryBuilder;
 use Gnugat\SearchEngine\ResourceDefinition;
 use Gnugat\SearchEngine\Service\TypeSanitizer;
 use PhpSpec\ObjectBehavior;
@@ -42,8 +42,8 @@ class StrictComparisonFilteringBuilderStrategySpec extends ObjectBehavior
     ) {
         $resourceDefinition->getFieldType('field')->willReturn(ResourceDefinition::TYPE_BOOLEAN);
         $typeSanitizer->sanitize('true', ResourceDefinition::TYPE_BOOLEAN)->willReturn(true);
-        $queryBuilder->andWhere('field = :field')->shouldBeCalled();
-        $queryBuilder->setParameter(':field', true, ResourceDefinition::TYPE_BOOLEAN)->shouldBeCalled();
+        $queryBuilder->addWhere('field = :field')->shouldBeCalled();
+        $queryBuilder->addParameter(':field', true, ResourceDefinition::TYPE_BOOLEAN)->shouldBeCalled();
 
         $this->build($queryBuilder, $resourceDefinition, 'field', 'true');
     }

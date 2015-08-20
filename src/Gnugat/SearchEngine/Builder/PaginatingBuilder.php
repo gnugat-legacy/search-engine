@@ -11,7 +11,6 @@
 
 namespace Gnugat\SearchEngine\Builder;
 
-use Gnugat\SearchEngine\QueryBuilder;
 use Gnugat\SearchEngine\Criteria\Paginating;
 
 class PaginatingBuilder
@@ -22,7 +21,7 @@ class PaginatingBuilder
      */
     public function build(QueryBuilder $queryBuilder, Paginating $paginating)
     {
-        $queryBuilder->setOffset($paginating->getOffset());
-        $queryBuilder->setLimit($paginating->getItemsPerPage());
+        $queryBuilder->offset($paginating->getOffset());
+        $queryBuilder->limit($paginating->getItemsPerPage());
     }
 }

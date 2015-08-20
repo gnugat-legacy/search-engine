@@ -14,7 +14,7 @@ namespace spec\Gnugat\SearchEngine\Builder;
 use Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
 use Gnugat\SearchEngine\Criteria\Filtering;
 use Gnugat\SearchEngine\ResourceDefinition;
-use Gnugat\SearchEngine\QueryBuilder;
+use Gnugat\SearchEngine\Builder\QueryBuilder;
 use PhpSpec\ObjectBehavior;
 
 class FilteringBuilderSpec extends ObjectBehavior

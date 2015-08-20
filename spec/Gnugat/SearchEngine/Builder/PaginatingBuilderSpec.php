@@ -11,8 +11,8 @@
 
 namespace spec\Gnugat\SearchEngine\Builder;
 
+use Gnugat\SearchEngine\Builder\QueryBuilder;
 use Gnugat\SearchEngine\Criteria\Paginating;
-use Gnugat\SearchEngine\QueryBuilder;
 use PhpSpec\ObjectBehavior;
 
 class PaginatingBuilderSpec extends ObjectBehavior
@@ -25,8 +25,8 @@ class PaginatingBuilderSpec extends ObjectBehavior
         $paginating->getOffset()->willReturn(self::OFFSET);
         $paginating->getItemsPerPage()->willReturn(self::LIMIT);
 
-        $queryBuilder->setOffset(self::OFFSET)->shouldBeCalled();
-        $queryBuilder->setLimit(self::LIMIT)->shouldBeCalled();
+        $queryBuilder->offset(self::OFFSET)->shouldBeCalled();
+        $queryBuilder->limit(self::LIMIT)->shouldBeCalled();
 
         $this->build($queryBuilder, $paginating);
     }
