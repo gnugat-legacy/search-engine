@@ -16,6 +16,7 @@ interface ResourceDefinition
     const TYPE_ARRAY = 'array';
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_INTEGER = 'integer';
+    const TYPE_STRING = 'string';
 
     /**
      * @param string $field
