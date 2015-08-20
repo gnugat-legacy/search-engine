@@ -11,7 +11,61 @@
 
 namespace Gnugat\SearchEngine\Builder;
 
-interface FilteringBuilder
+use Gnugat\SearchEngine\Criteria\Filtering;
+use Gnugat\SearchEngine\QueryBuilder;
+use Gnugat\SearchEngine\ResourceDefinition;
+
+class FilteringBuilder
 {
-    public function build($argument1, $argument2, $argument3);
+    /**
+     * @var array
+     */
+    private $prioritizedFilteringBuilderStrategies = array();
+
+    /**
+     * @var bool
+     */
+    private $isSorted = false;
+
+    /**
+     * @param FilteringBuilderStrategy $filteringBuilderStrategy
+     * @param int                      $priority
+     */
+    public function add(FilteringBuilderStrategy $filteringBuilderStrategy, $priority = 0)
+    {
+        $this->prioritizedFilteringBuilderStrategies[$priority][] = $filteringBuilderStrategy;
+        $this->isSorted = false;
+    }
+
+    /**
+     * @param QueryBuilder       $queryBuilder
+     * @param ResourceDefinition $resourceDefinition
+     * @param Filtering          $filtering
+     */
+    public function build(QueryBuilder $queryBuilder, ResourceDefinition $resourceDefinition, Filtering $filtering)
+    {
+        if (!$this->isSorted) {
+            $this->sortStrategies();
+        }
+        foreach ($filtering->getFields() as $field => $value) {
+            foreach ($this->prioritizedFilteringBuilderStrategies as $priority => $filteringBuilderStrategies) {
+                foreach ($filteringBuilderStrategies as $filteringBuilderStrategy) {
+                    if ($filteringBuilderStrategy->supports($resourceDefinition, $field, $value)) {
+                        $filteringBuilderStrategy->build($queryBuilder, $field, $value);
+
+                        break 2;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Sort registered strategies according to their priority.
+     */
+    private function sortStrategies()
+    {
+        krsort($this->prioritizedFilteringBuilderStrategies);
+        $this->isSorted = true;
+    }
 }
