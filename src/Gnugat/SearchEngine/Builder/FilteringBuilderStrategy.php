@@ -26,9 +26,10 @@ interface FilteringBuilderStrategy
     public function supports(ResourceDefinition $resourceDefinition, $field, $value);
 
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param string       $field
-     * @param mixed        $value
+     * @param QueryBuilder       $queryBuilder
+     * @param ResourceDefinition $resourceDefinition
+     * @param string             $field
+     * @param mixed              $value
      */
-    public function build(QueryBuilder $queryBuilder, $field, $value);
+    public function build(QueryBuilder $queryBuilder, ResourceDefinition $resourceDefinition, $field, $value);
 }

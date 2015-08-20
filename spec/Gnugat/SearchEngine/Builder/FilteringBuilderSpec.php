@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the gnugat/search-engine package.
+ *
+ * (c) Loïc Chardonnet <loic.chardonnet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace spec\Gnugat\SearchEngine\Builder;
 
 use Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
@@ -27,9 +36,9 @@ class FilteringBuilderSpec extends ObjectBehavior
         $lowestPriority->supports($resourceDefinition, self::FIELD, self::VALUE)->willReturn(true);
         $highestPriority->supports($resourceDefinition, self::FIELD, self::VALUE)->willReturn(true);
 
-        $middlePriority->build($queryBuilder, self::FIELD, self::VALUE)->shouldNotBeCalled();
-        $lowestPriority->build($queryBuilder, self::FIELD, self::VALUE)->shouldNotBeCalled();
-        $highestPriority->build($queryBuilder, self::FIELD, self::VALUE)->shouldBeCalled();
+        $middlePriority->build($queryBuilder, $resourceDefinition, self::FIELD, self::VALUE)->shouldNotBeCalled();
+        $lowestPriority->build($queryBuilder, $resourceDefinition, self::FIELD, self::VALUE)->shouldNotBeCalled();
+        $highestPriority->build($queryBuilder, $resourceDefinition, self::FIELD, self::VALUE)->shouldBeCalled();
 
         $this->add($middlePriority, 10);
         $this->add($lowestPriority, 0);
@@ -52,9 +61,9 @@ class FilteringBuilderSpec extends ObjectBehavior
         $appropriate->supports($resourceDefinition, self::FIELD, self::VALUE)->willReturn(true);
         $anotherInappropriate->supports($resourceDefinition, self::FIELD, self::VALUE)->shouldNotBeCalled();
 
-        $inappropriate->build($queryBuilder, self::FIELD, self::VALUE)->shouldNotBeCalled();
-        $appropriate->build($queryBuilder, self::FIELD, self::VALUE)->shouldBeCalled();
-        $anotherInappropriate->build($queryBuilder, self::FIELD, self::VALUE)->shouldNotBeCalled();
+        $inappropriate->build($queryBuilder, $resourceDefinition, self::FIELD, self::VALUE)->shouldNotBeCalled();
+        $appropriate->build($queryBuilder, $resourceDefinition, self::FIELD, self::VALUE)->shouldBeCalled();
+        $anotherInappropriate->build($queryBuilder, $resourceDefinition, self::FIELD, self::VALUE)->shouldNotBeCalled();
 
         $this->add($inappropriate);
         $this->add($appropriate);

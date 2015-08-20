@@ -51,7 +51,7 @@ class FilteringBuilder
             foreach ($this->prioritizedFilteringBuilderStrategies as $priority => $filteringBuilderStrategies) {
                 foreach ($filteringBuilderStrategies as $filteringBuilderStrategy) {
                     if ($filteringBuilderStrategy->supports($resourceDefinition, $field, $value)) {
-                        $filteringBuilderStrategy->build($queryBuilder, $field, $value);
+                        $filteringBuilderStrategy->build($queryBuilder, $resourceDefinition, $field, $value);
 
                         break 2;
                     }

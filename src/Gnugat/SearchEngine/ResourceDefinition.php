@@ -13,10 +13,20 @@ namespace Gnugat\SearchEngine;
 
 interface ResourceDefinition
 {
+    const TYPE_ARRAY = 'array';
+    const TYPE_INTEGER = 'integer';
+
     /**
      * @param string $field
      *
      * @return bool
      */
-    public function hasField($argument1);
+    public function hasField($field);
+
+    /**
+     * @param string $field
+     *
+     * @return string
+     */
+    public function getFieldType($field);
 }

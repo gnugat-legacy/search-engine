@@ -25,6 +25,18 @@ interface QueryBuilder
     public function from($resource, $alias = null);
 
     /**
+     * @param string $where
+     */
+    public function andWhere($where);
+
+    /**
+     * @param mixed  $name
+     * @param mixed  $value
+     * @param string $type
+     */
+    public function setParameter($name, $value, $type);
+
+    /**
      * @param string $field
      * @param string $direction
      */
