@@ -11,7 +11,16 @@
 
 namespace Gnugat\SearchEngine\Builder;
 
+use Gnugat\SearchEngine\Criteria;
+use Gnugat\SearchEngine\QueryBuilder;
+use Gnugat\SearchEngine\ResourceDefinition;
+
 interface SelectBuilder
 {
-    public function build($argument1, $argument2, $argument3);
+    /**
+     * @param QueryBuilder       $queryBuilder
+     * @param ResourceDefinition $resourceDefinition
+     * @param Criteria           $criteria
+     */
+    public function build(QueryBuilder $queryBuilder, ResourceDefinition $resourceDefinition, Criteria $criteria);
 }
