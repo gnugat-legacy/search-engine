@@ -88,14 +88,14 @@ class SearchEngine
         $this->filteringBuilder->build($queryBuilder, $resourceDefinition, $criteria->getFiltering());
 
         $queryBuilder->select('COUNT(id) AS total');
-        $countResults = $queryBuilder->execute();
-        $totalElements = (int) $countResults[0]['total'];
+        $countResults = $queryBuilder->fetchFirst();
+        $totalElements = (int) $countResults['total'];
         $totalPages = (int) ceil($totalElements / $perPage);
 
         $selectBuilder->build($queryBuilder, $resourceDefinition, $criteria);
         $this->paginatingBuilder->build($queryBuilder, $paginating);
         $this->orderingsBuilder->build($queryBuilder, $resourceDefinition, $criteria->getOrderings());
-        $items = $queryBuilder->execute();
+        $items = $queryBuilder->fetchAll();
 
         return '{"items":'.$items.',"page":{"current_page":'.$currentPage.',"per_page":'.$perPage.',"total_elements":'.$totalElements.',"total_pages":'.$totalPages.'}}';
     }

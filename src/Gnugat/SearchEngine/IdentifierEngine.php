@@ -65,12 +65,12 @@ class IdentifierEngine
         $selectBuilder->build($queryBuilder, $resourceDefinition, $criteria);
         $queryBuilder->from($resourceName);
         $this->filteringBuilder->build($queryBuilder, $resourceDefinition, $criteria->getFiltering());
-        $result = json_decode($queryBuilder->execute());
-        if (empty($result)) {
+        $result = $queryBuilder->fetchFirst();
+        if (null === $result) {
             throw new NoMatchException('No match found for resource "'.$resourceName.'"');
         }
 
-        return json_encode($result[0]);
+        return $result;
     }
 
     /**

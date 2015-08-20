@@ -73,18 +73,19 @@ class SearchEngineSpec extends ObjectBehavior
         $items = array(array('id' => 42));
         $countParameters = array();
         $countParameterTypes = array();
-        $countResult = array(array('total' => self::TOTAL_ELEMENTS));
+        $countResult = array('total' => self::TOTAL_ELEMENTS);
 
         $queryBuilderFactory->make()->willReturn($queryBuilder);
         $queryBuilder->from(self::RESOURCE_NAME)->shouldBeCalled();
         $filteringBuilder->build($queryBuilder, $resourceDefinition, $criteria->getFiltering())->shouldBeCalled();
 
         $queryBuilder->select('COUNT(id) AS total')->shouldBeCalled();
-        $queryBuilder->execute()->willReturn($countResult, json_encode($items));
+        $queryBuilder->fetchFirst()->willReturn($countResult);
 
         $selectBuilder->build($queryBuilder, $resourceDefinition, $criteria)->shouldBeCalled();
         $paginatingBuilder->build($queryBuilder, $criteria->getPaginating())->shouldBeCalled();
         $orderingsBuilder->build($queryBuilder, $resourceDefinition, $criteria->getOrderings())->shouldBeCalled();
+        $queryBuilder->fetchAll()->willReturn(json_encode($items));
 
         $this->add(self::RESOURCE_NAME, $resourceDefinition, $selectBuilder);
         $this->match($criteria)->shouldBe(json_encode(array(

@@ -54,7 +54,7 @@ class IdentifierEngineSpec extends ObjectBehavior
         $selectBuilder->build($queryBuilder, $resourceDefinition, $criteria)->shouldBeCalled();
         $queryBuilder->from(self::RESOURCE_NAME)->shouldBeCalled();
         $filteringBuilder->build($queryBuilder, $resourceDefinition, $criteria->getFiltering())->shouldBeCalled();
-        $queryBuilder->execute()->willReturn(json_encode(array()));
+        $queryBuilder->fetchFirst()->willReturn(null);
 
         $this->add(self::RESOURCE_NAME, $resourceDefinition, $selectBuilder);
         $noMatchException = 'Gnugat\SearchEngine\NoMatchException';
@@ -77,7 +77,7 @@ class IdentifierEngineSpec extends ObjectBehavior
         $selectBuilder->build($queryBuilder, $resourceDefinition, $criteria)->shouldBeCalled();
         $queryBuilder->from(self::RESOURCE_NAME)->shouldBeCalled();
         $filteringBuilder->build($queryBuilder, $resourceDefinition, $criteria->getFiltering())->shouldBeCalled();
-        $queryBuilder->execute()->willReturn(json_encode(array($item)));
+        $queryBuilder->fetchFirst()->willReturn(json_encode($item));
 
         $this->add(self::RESOURCE_NAME, $resourceDefinition, $selectBuilder);
         $this->match($criteria)->shouldBe(json_encode($item));

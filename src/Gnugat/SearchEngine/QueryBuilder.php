@@ -31,7 +31,12 @@ interface QueryBuilder
     public function addOrderBy($field, $direction);
 
     /**
-     * @return \Traversable Depending on the implementation, could be an array or an iterator.
+     * @return mixed
      */
-    public function execute();
+    public function fetchAll();
+
+    /**
+     * @return mixed
+     */
+    public function fetchFirst();
 }
