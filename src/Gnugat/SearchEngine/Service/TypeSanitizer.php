@@ -26,6 +26,9 @@ class TypeSanitizer
         if (ResourceDefinition::TYPE_INTEGER === $type) {
             return (int) $value;
         }
+        if (ResourceDefinition::TYPE_BOOLEAN === $type) {
+            return 'false' === $value ? false : (bool) $value;
+        }
 
         return $value;
     }

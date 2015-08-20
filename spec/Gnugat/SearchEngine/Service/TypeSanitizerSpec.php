@@ -16,6 +16,27 @@ use PhpSpec\ObjectBehavior;
 
 class TypeSanitizerSpec extends ObjectBehavior
 {
+    function it_sanitizes_booleans()
+    {
+        $this->sanitize(true, ResourceDefinition::TYPE_BOOLEAN)->shouldBe(true);
+        $this->sanitize(false, ResourceDefinition::TYPE_BOOLEAN)->shouldBe(false);
+
+        $this->sanitize(-23, ResourceDefinition::TYPE_BOOLEAN)->shouldBe(true);
+        $this->sanitize(42, ResourceDefinition::TYPE_BOOLEAN)->shouldBe(true);
+        $this->sanitize(0, ResourceDefinition::TYPE_BOOLEAN)->shouldBe(false);
+
+        $this->sanitize('true', ResourceDefinition::TYPE_BOOLEAN)->shouldBe(true);
+        $this->sanitize('1', ResourceDefinition::TYPE_BOOLEAN)->shouldBe(true);
+        $this->sanitize('hello', ResourceDefinition::TYPE_BOOLEAN)->shouldBe(true);
+        $this->sanitize('false', ResourceDefinition::TYPE_BOOLEAN)->shouldBe(false);
+        $this->sanitize('', ResourceDefinition::TYPE_BOOLEAN)->shouldBe(false);
+        $this->sanitize('0', ResourceDefinition::TYPE_BOOLEAN)->shouldBe(false);
+
+        $this->sanitize(array(), ResourceDefinition::TYPE_BOOLEAN)->shouldBe(false);
+        $this->sanitize(array('hello'), ResourceDefinition::TYPE_BOOLEAN)->shouldBe(true);
+        $this->sanitize(array(array()), ResourceDefinition::TYPE_BOOLEAN)->shouldBe(true);
+    }
+
     function it_sanitizes_integers()
     {
         $this->sanitize(42, ResourceDefinition::TYPE_INTEGER)->shouldBe(42);

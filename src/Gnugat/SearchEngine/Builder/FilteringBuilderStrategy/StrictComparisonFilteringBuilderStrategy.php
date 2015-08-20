@@ -32,7 +32,7 @@ class StrictComparisonFilteringBuilderStrategy implements FilteringBuilderStrate
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports(ResourceDefinition $resourceDefinition, $field, $value)
     {
@@ -40,7 +40,7 @@ class StrictComparisonFilteringBuilderStrategy implements FilteringBuilderStrate
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function build(QueryBuilder $queryBuilder, ResourceDefinition $resourceDefinition, $field, $value)
     {
