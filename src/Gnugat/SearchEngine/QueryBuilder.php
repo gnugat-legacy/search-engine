@@ -31,6 +31,16 @@ interface QueryBuilder
     public function addOrderBy($field, $direction);
 
     /**
+     * @param int $offset
+     */
+    public function setOffset($offset);
+
+    /**
+     * @param int $limit
+     */
+    public function setLimit($limit);
+
+    /**
      * @return mixed
      */
     public function fetchAll();

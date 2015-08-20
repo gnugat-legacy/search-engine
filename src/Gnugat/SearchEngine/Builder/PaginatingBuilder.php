@@ -11,7 +11,18 @@
 
 namespace Gnugat\SearchEngine\Builder;
 
-interface PaginatingBuilder
+use Gnugat\SearchEngine\QueryBuilder;
+use Gnugat\SearchEngine\Criteria\Paginating;
+
+class PaginatingBuilder
 {
-    public function build($argument1, $argument2);
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param Paginating   $paginating
+     */
+    public function build(QueryBuilder $queryBuilder, Paginating $paginating)
+    {
+        $queryBuilder->setOffset($paginating->getOffset());
+        $queryBuilder->setLimit($paginating->getItemsPerPage());
+    }
 }
