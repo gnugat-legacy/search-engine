@@ -11,13 +11,12 @@
 
 namespace Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
 
-use Doctrine\Common\Inflector\Inflector;
 use Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
 use Gnugat\SearchEngine\QueryBuilder;
 use Gnugat\SearchEngine\ResourceDefinition;
 use Gnugat\SearchEngine\Service\TypeSanitizer;
 
-class RangeFilteringBuilderStrategy implements FilteringBuilderStrategy
+class StrictComparisonFilteringBuilderStrategy implements FilteringBuilderStrategy
 {
     /**
      * @var TypeSanitizer
@@ -33,31 +32,22 @@ class RangeFilteringBuilderStrategy implements FilteringBuilderStrategy
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports(ResourceDefinition $resourceDefinition, $field, $value)
     {
-        return false === $resourceDefinition->hasField($field) && true === $resourceDefinition->hasField(Inflector::singularize($field));
+        return $resourceDefinition->hasField($field);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function build(QueryBuilder $queryBuilder, ResourceDefinition $resourceDefinition, $field, $value)
     {
-        $value = trim($value, ',');
-        if (empty($value)) {
-            return;
-        }
         $parameterName = ":$field";
-        $field = Inflector::singularize($field);
         $type = $resourceDefinition->getFieldType($field);
-        $parameterValues = array();
-        $rawValues = explode(',', $value);
-        foreach ($rawValues as $rawValue) {
-            $parameterValues[] = $this->typeSanitizer->sanitize($rawValue, $type);
-        }
-        $queryBuilder->andWhere("$field IN ($parameterName)");
-        $queryBuilder->setParameter($parameterName, $parameterValues, ResourceDefinition::TYPE_ARRAY);
+        $value = $this->typeSanitizer->sanitize($value, $type);
+        $queryBuilder->andWhere("$field = $parameterName");
+        $queryBuilder->setParameter($parameterName, $value, $type);
     }
 }
