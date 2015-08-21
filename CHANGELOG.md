@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 0.2.1: Pomm implementation
+
+* added link to [PommSearchEngine](https://github.com/gnugat/pomm-search-engine), a [Pomm Foundation](http://www.pomm-project.org/) implementation
+
 ## 0.2.0: array results
 
 Previously, results were returned as encoded JSON.
