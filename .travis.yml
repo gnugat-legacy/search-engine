@@ -23,6 +23,7 @@ matrix:
 
 before_script:
     - composer selfupdate
+    - cp tests/Fixtures/Project/config.yml.dist tests/Fixtures/Project/config.yml
 
 script:
     - bin/test.sh
