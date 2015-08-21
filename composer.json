@@ -27,7 +27,7 @@
         "ext-pdo": "*",
         "ext-pdo_pgsql": "*",
         "fabpot/php-cs-fixer": "^1.6",
-        "incenteev/composer-parameter-handle": "^2.1",
+        "incenteev/composer-parameter-handler": "^2.1",
         "memio/spec-gen": "^0.4",
         "phpspec/phpspec": "^2.3@beta",
         "phpunit/phpunit": "^4.6",
@@ -39,7 +39,7 @@
     },
     "extra": {
         "incenteev-parameters": [
-            { "file": "tests/Fixtures/PdoSearchEngine/config.yml" }
+            { "file": "tests/Fixtures/Project/config.yml" }
         ]
     }
 }
