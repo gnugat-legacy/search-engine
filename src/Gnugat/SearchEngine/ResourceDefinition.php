@@ -13,9 +13,9 @@ namespace Gnugat\SearchEngine;
 
 class ResourceDefinition
 {
-    const TYPE_ARRAY = 'array';
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_INTEGER = 'integer';
+    const TYPE_NULL = 'null';
     const TYPE_STRING = 'string';
 
     /**

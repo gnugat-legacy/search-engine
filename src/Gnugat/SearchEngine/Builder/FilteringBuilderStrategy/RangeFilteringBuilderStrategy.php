@@ -49,15 +49,15 @@ class RangeFilteringBuilderStrategy implements FilteringBuilderStrategy
         if (empty($value)) {
             return;
         }
-        $parameterName = ":$field";
         $field = Inflector::singularize($field);
         $type = $resourceDefinition->getFieldType($field);
-        $parameterValues = array();
-        $rawValues = explode(',', $value);
-        foreach ($rawValues as $rawValue) {
-            $parameterValues[] = $this->typeSanitizer->sanitize($rawValue, $type);
+        $parameterNames = array();
+        foreach (explode(',', $value) as $parameterNumber => $parameterValue) {
+            $parameterName = ':'.$field.'_'.$parameterNumber;
+            $sanitizedParameterValue = $this->typeSanitizer->sanitize($parameterValue, $type);
+            $queryBuilder->addParameter($parameterName, $sanitizedParameterValue, $type);
+            $parameterNames[] = $parameterName;
         }
-        $queryBuilder->addWhere("$field IN ($parameterName)");
-        $queryBuilder->addParameter($parameterName, $parameterValues, ResourceDefinition::TYPE_ARRAY);
+        $queryBuilder->addWhere($field.' IN ('.implode(', ', $parameterNames).')');
     }
 }

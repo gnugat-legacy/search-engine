@@ -102,15 +102,17 @@ class QueryBuilderSpec extends ObjectBehavior
 
     function it_can_filter_results_with_parameters(Fetcher $fetcher)
     {
-        $fetcher->fetchAll('SELECT * FROM resource WHERE name LIKE :name AND id IN :ids', array(
+        $fetcher->fetchAll('SELECT * FROM resource WHERE name LIKE :name AND id IN (:id_0, :id_1)', array(
             array('name' => ':name', 'value' => 'ban%', 'type' => ResourceDefinition::TYPE_STRING),
-            array('name' => ':ids', 'value' => array(1, 3), 'type' => ResourceDefinition::TYPE_ARRAY),
+            array('name' => ':id_0', 'value' => 1, 'type' => ResourceDefinition::TYPE_INTEGER),
+            array('name' => ':id_1', 'value' => 3, 'type' => ResourceDefinition::TYPE_INTEGER),
         ))->shouldBeCalled();
 
         $this->addWhere('name LIKE :name');
         $this->addParameter(':name', 'ban%', ResourceDefinition::TYPE_STRING);
-        $this->addWhere('id IN :ids');
-        $this->addParameter(':ids', array(1, 3), ResourceDefinition::TYPE_ARRAY);
+        $this->addWhere('id IN (:id_0, :id_1)');
+        $this->addParameter(':id_0', 1, ResourceDefinition::TYPE_INTEGER);
+        $this->addParameter(':id_1', 3, ResourceDefinition::TYPE_INTEGER);
         $this->from('resource');
         $this->fetchAll();
     }
