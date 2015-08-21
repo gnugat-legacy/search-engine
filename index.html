@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>SearchEngine</title>
+
+        <link rel="stylesheet" href="http://gnugat.github.io/search-engine/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/search-engine/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/search-engine/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/search-engine/css/main.css">
+    </head>
+    <body>
+
+        <header class="navbar navbar-default navbar-fixed-top">
+
+            <a class="navbar-brand" href="http://gnugat.github.io/search-engine/">
+                SearchEngine
+                <small class="hidden-xs hidden-sm">
+                    A POC library to handle interrogatory messages
+                </small>
+            </a>
+
+                            <a href="https://github.com/gnugat/search-engine">
+                    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+                </a>
+            
+        </header>
+
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/search-engine/">
+                                        Home
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/search-engine/doc/01-installation.html">
+                                        Installation
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/search-engine/doc/02-extending.html">
+                                        Extending
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h1>Search Engine <a href="https://insight.sensiolabs.com/projects/0bf23baf-b278-4be1-9e20-0a12472bb0ed"><img src="https://insight.sensiolabs.com/projects/0bf23baf-b278-4be1-9e20-0a12472bb0ed/mini.png" alt="SensioLabsInsight" /></a> <a href="https://travis-ci.org/gnugat/search-engine"><img src="https://travis-ci.org/gnugat/search-engine.svg?branch=master" alt="Build Status" /></a></h1>
+<p>A Proof Of Concept demonstrating how to handle Interrogatory Messages.</p>
+<p>The <a href="http://martinfowler.com/bliki/CQRS.html">Command / Query Responsibility Segregation</a>
+principle explains that Imperative and Interrogatory messages shouldn't be mixed together.</p>
+<blockquote>
+<p><strong>Note</strong>: Learn more about the different <a href="http://verraes.net/2015/01/messaging-flavours/">messaging flavours</a>.</p>
+</blockquote>
+<p>Usually imperative messages are handled using the CommandBus pattern, which leaves
+us with the following question: how Interrogatory Messages should be handled?</p>
+<p>This component tries to explore one of the possible answers: a SearchEngine that
+would try to return results matching a given criteria.</p>
+<blockquote>
+<p><strong>Caution</strong>: this component does not provide actual SearchEngine features,
+if you're looking for one you should rather have a look at ElasticSearch, Solr, etc.</p>
+</blockquote>
+<h2>Installation</h2>
+<p>Download SearchEngine using <a href="https://getcomposer.org/download">Composer</a>:</p>
+<pre><code>composer require gnugat/search-engine:^0.1</code></pre>
+<p>You'll also need to choose one of the following implementations:</p>
+<ul>
+<li>none yet :( (possible implementations: PDO, Pomm Foundation, Doctrine DBAL, Doctrine ORM, etc)</li>
+</ul>
+<blockquote>
+<p><strong>Note</strong>: For more information about how to instantiate the classes, see <a href="doc/01-installation.html">the installation documentation</a>.</p>
+</blockquote>
+<h2>Usage</h2>
+<p><code>SearchEngine</code> expects a <code>Criteria</code> object which describes:</p>
+<ul>
+<li>the resource to query</li>
+<li>relations to embed</li>
+<li>filters to apply</li>
+<li>pagination parameters</li>
+<li>ordering instructions</li>
+</ul>
+<p>It can be built from query parameters as follow:</p>
+<pre><code class="language-php">// ...
+$criteria = $criteriaFactory-&gt;fromQueryParameters('blog', array(
+    // Filters
+    'title' =&gt; 'IG',
+    'author_ids' =&gt; '1,3',
+
+    // Pagination
+    'page' =&gt; '2',
+    'per_page' =&gt; '3',
+
+    // Ordering
+    'sort' =&gt; 'author_id,-title',
+
+    // Relation embeding
+    'embed' =&gt; 'author',
+));
+print_r($searchEngine-&gt;match($criteria));</code></pre>
+<p>In a web context, this <code>$queryParameters</code> array could actually be <code>$_GET</code>, corresponding to the following URL:</p>
+<pre><code>/v1/blogs?title=IG&amp;author_ids=1,2&amp;page=1&amp;per_page=3&amp;sort=author_id,-title&amp;embed=author</code></pre>
+<p>The result could be the following:</p>
+<pre><code>array(
+    'items' =&gt; array(
+        array(
+            'id' =&gt; 1,
+            'title' =&gt; 'Big Title',
+            'author_id' =&gt; 1,
+        ),
+        array(
+            'id' =&gt; 2,
+            'title' =&gt; 'Big Header',
+            'author_id' =&gt; 2,
+        ),
+    ),
+    'page' =&gt; array(
+        'current_page' =&gt; 1,
+        'per_page' =&gt; 3,
+        'total_elements' =&gt; 2,
+        'total_pages' =&gt; 1,
+    ),
+)</code></pre>
+<h2>Features</h2>
+<ul>
+<li>embeding relations</li>
+<li>filtering string with a case insensitive regex</li>
+<li>filtering ID and booleans by equality</li>
+<li>filtering ranges (plural name, comma separated list: <code>farm_ids=1,2,3</code>)</li>
+<li>ordering many fields, with direction (prefix with <code>-</code> for DESCendant ordering)</li>
+<li>paginating results with total information</li>
+</ul>
+<h2>Further documentation</h2>
+<p>You can see the current and past versions using one of the following:</p>
+<ul>
+<li>the <code>git tag</code> command</li>
+<li>the <a href="https://github.com/gnugat/search-engine/releases">releases page on Github</a></li>
+<li>the file listing the <a href="CHANGELOG.html">changes between versions</a></li>
+</ul>
+<p>You can find more documentation at the following links:</p>
+<ul>
+<li><a href="LICENSE">copyright and MIT license</a></li>
+<li><a href="VERSIONING.html">versioning and branching models</a></li>
+<li><a href="CONTRIBUTING.html">contribution instructions</a></li>
+</ul>
+<p>Next readings:</p>
+<ul>
+<li><a href="doc/01-installtion.html">Installation</a></li>
+<li><a href="doc/02-extending.html">Extending</a></li>
+</ul>
+                </section>
+
+            </div>
+        </main>
+
+        <footer>
+            <div class="container-fluid">
+                <p class="text-muted">
+                    website generated with <a href="http://couscous.io" title="Markdown website generator">Couscous</a>
+                </p>
+            </div>
+        </footer>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

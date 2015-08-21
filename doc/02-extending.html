@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>SearchEngine</title>
+
+        <link rel="stylesheet" href="http://gnugat.github.io/search-engine/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/search-engine/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/search-engine/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/search-engine/css/main.css">
+    </head>
+    <body>
+
+        <header class="navbar navbar-default navbar-fixed-top">
+
+            <a class="navbar-brand" href="http://gnugat.github.io/search-engine/">
+                SearchEngine
+                <small class="hidden-xs hidden-sm">
+                    A POC library to handle interrogatory messages
+                </small>
+            </a>
+
+                            <a href="https://github.com/gnugat/search-engine">
+                    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+                </a>
+            
+        </header>
+
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/search-engine/">
+                                        Home
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/search-engine/doc/01-installation.html">
+                                        Installation
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/search-engine/doc/02-extending.html">
+                                        Extending
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h1>Extending</h1>
+<p>SearchEngine can be extended in many ways:</p>
+<ul>
+<li><a href="#fetcher">Fetcher</a></li>
+<li><a href="#filteringbuilderstrategy">FilteringBuilderStrategy</a></li>
+</ul>
+<h2>Fetcher</h2>
+<p>With a bit of luck, your favorite &quot;database library&quot; would have been integrated
+with SearchEngine already. If it's not the case, don't panic! It's as simple as
+implementing <code>Fetcher</code>.</p>
+<p>Here's an example (using fixtures that can be found in <code>tests/Fixtures/PdoSearchEngine</code>):</p>
+<pre><code class="language-php">&lt;?php
+
+use Gnugat\SearchEngine\Fetcher;
+use Gnugat\SearchEngine\ResourceDefinition;
+use PDO;
+
+class PdoFetcher implements Fetcher
+{
+    private $pdo;
+    private $types;
+
+    public function __construct(PDO $pdo)
+    {
+        $this-&gt;pdo = $pdo;
+        $this-&gt;types = array(
+            ResourceDefinition::TYPE_INTEGER =&gt; PDO::PARAM_INT,
+            ResourceDefinition::TYPE_NULL =&gt; PDO::PARAM_NULL,
+            ResourceDefinition::TYPE_STRING =&gt; PDO::PARAM_STR,
+        );
+    }
+
+    public function fetchAll($sql, array $parameters)
+    {
+        $wrappedSql = 'SELECT array_to_json(array_agg(row_to_json(t))) FROM ('.$sql.') t';
+        $result = $this-&gt;getPDOStatement($wrappedSql, $parameters)-&gt;fetch(PDO::FETCH_ASSOC);
+
+        return (true === isset($result['array_to_json']) &amp;&amp; null !== $result['array_to_json']) ? $result['array_to_json'] : '[]';
+    }
+
+    public function fetchFirst($sql, array $parameters)
+    {
+        $wrappedSql = 'SELECT row_to_json(t) FROM ('.$sql.') t';
+        $result = $this-&gt;getPDOStatement($wrappedSql, $parameters)-&gt;fetch(PDO::FETCH_ASSOC);
+
+        return (true === isset($result['row_to_json']) &amp;&amp; null !== $result['row_to_json']) ? $result['row_to_json'] : null;
+    }
+
+    private function getPDOStatement($sql, array $parameters)
+    {
+        $pdoStatement = $this-&gt;pdo-&gt;prepare($sql);
+        foreach ($parameters as $parameter) {
+            $pdoStatement-&gt;bindParam($parameter['name'], $parameter['value'], $this-&gt;types[$parameter['type']]);
+        }
+        $pdoStatement-&gt;execute();
+
+        return $pdoStatement;
+    }
+}</code></pre>
+<p>Possible implementation could be: PDO, Pomm Foundation, Doctrine DBAL, Doctrine ORM, etc.</p>
+<h2>FilteringBuilderStrategy</h2>
+<p>In order to filter resulsts, SearchEngine relies on implementations of <code>FilteringBuilderStrategy</code>.</p>
+<p>Out of the box it provides the following vendor agnostic implementations:</p>
+<ul>
+<li><code>RangeFilteringBuilderStrategy</code>, allows you to do a <code>WHERE field IN (values)</code> (priority 30)</li>
+<li><code>StrictComparisonFilteringBuilderStrategy</code>, allows you to do a <code>WHERE field = value</code> (priority 10)</li>
+</ul>
+<p>Those are already registered in <code>SearchEngine</code> and <code>IndentifierEngine</code> if you use <code>Build</code>.</p>
+<p>It also provides one Postgres specific implementation:</p>
+<ul>
+<li><code>RegexFilteringBuilderStrategy</code>, allows you to do a <code>WHERE field ~* .*value.*</code></li>
+</ul>
+<p>This one needs to be registered as follow:</p>
+<pre><code class="language-php">use Gnugat\SearchEngine\Build;
+use Gnugat\SearchEngine\Builder\FilteringBuilderStrategy\RegexFilteringBuilderStrategy;
+
+Build::addFilteringBuilderStrategy(new RegexFilteringBuilderStrategy(), 20);</code></pre>
+<blockquote>
+<p><strong>Note</strong>: The second argument is a priority index.
+With a high number, you force SearchEngine to check your <code>FilteringBuilderStrategy</code> before the others.</p>
+</blockquote>
+<p>You could also create a domain specific filter:</p>
+<pre><code class="language-php">&lt;?php
+
+use Gnugat\SearchEngine\Builder\FilteringBuilderStrategy;
+use Gnugat\SearchEngine\Builder\QueryBuilder;
+use Gnugat\SearchEngine\ResourceDefinition;
+
+class CanOnlySeeTheirOwnFilteringBuilderStrategy implements FilteringBuilderStrategy
+{
+    public function supports(ResourceDefinition $resourceDefinition, $field, $value)
+    {
+        return $resourceDefinition-&gt;getName('blog') &amp;&amp; $field === 'current_user_id';
+    }
+
+    public function build(QueryBuilder $queryBuilder, ResourceDefinition $resourceDefinition, $field, $value)
+    {
+        $queryBuilder-&gt;addWhere('author_id = :current_user_id');
+        $queryBuilder-&gt;addParameter(':current_user_id', $value, ResourceDefinition::TYPE_INTEGER);
+    }
+}</code></pre>
+                </section>
+
+            </div>
+        </main>
+
+        <footer>
+            <div class="container-fluid">
+                <p class="text-muted">
+                    website generated with <a href="http://couscous.io" title="Markdown website generator">Couscous</a>
+                </p>
+            </div>
+        </footer>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>
