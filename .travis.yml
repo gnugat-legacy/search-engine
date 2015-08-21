@@ -6,6 +6,8 @@ cache:
     directories:
         - $HOME/.composer/cache
 
+services: postgresql
+
 php:
     - 5.3
     - 5.4
