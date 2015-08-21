@@ -80,7 +80,15 @@ class SearchEngine
 
         $resourceName = $criteria->getResourceName();
         if (!isset($this->resourceDefinitions[$resourceName]) || !isset($this->selectBuilders[$resourceName])) {
-            return '{"items":[],"page":{"current_page":'.$currentPage.',"per_page":'.$perPage.',"total_elements":0,"total_pages":0}}';
+            return array(
+                'items' => array(),
+                'page' => array(
+                    'current_page' => $currentPage,
+                    'per_page' => $perPage,
+                    'total_elements' => 0,
+                    'total_pages' => 0,
+                ),
+            );
         }
         $resourceDefinition = $this->resourceDefinitions[$resourceName];
         $selectBuilder = $this->selectBuilders[$resourceName];
@@ -89,7 +97,7 @@ class SearchEngine
         $this->filteringBuilder->build($queryBuilder, $resourceDefinition, $criteria->getFiltering());
 
         $queryBuilder->addSelect('COUNT(id) AS total');
-        $countResults = json_decode($queryBuilder->fetchFirst(), true);
+        $countResults = $queryBuilder->fetchFirst();
         $totalElements = (int) $countResults['total'];
         $totalPages = (int) ceil($totalElements / $perPage);
 
@@ -99,7 +107,15 @@ class SearchEngine
         $this->orderingsBuilder->build($queryBuilder, $resourceDefinition, $criteria->getOrderings());
         $items = $queryBuilder->fetchAll();
 
-        return '{"items":'.$items.',"page":{"current_page":'.$currentPage.',"per_page":'.$perPage.',"total_elements":'.$totalElements.',"total_pages":'.$totalPages.'}}';
+        return array(
+            'items' => $items,
+            'page' => array(
+                'current_page' => $currentPage,
+                'per_page' => $perPage,
+                'total_elements' => $totalElements,
+                'total_pages' => $totalPages,
+            ),
+        );
     }
 
     /**

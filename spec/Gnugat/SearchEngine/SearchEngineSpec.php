@@ -46,7 +46,7 @@ class SearchEngineSpec extends ObjectBehavior
             'per_page' => self::PER_PAGE,
         ));
 
-        $this->match($criteria)->shouldBe(json_encode(array(
+        $this->match($criteria)->shouldBe(array(
             'items' => array(),
             'page' => array(
                 'current_page' => self::CURRENT_PAGE,
@@ -54,7 +54,7 @@ class SearchEngineSpec extends ObjectBehavior
                 'total_elements' => 0,
                 'total_pages' => 0,
             ),
-        )));
+        ));
     }
 
     function it_paginates_matching_results(
@@ -80,16 +80,16 @@ class SearchEngineSpec extends ObjectBehavior
         $filteringBuilder->build($queryBuilder, $resourceDefinition, $criteria->getFiltering())->shouldBeCalled();
 
         $queryBuilder->addSelect('COUNT(id) AS total')->shouldBeCalled();
-        $queryBuilder->fetchFirst()->willReturn(json_encode($countResult));
+        $queryBuilder->fetchFirst()->willReturn($countResult);
 
         $queryBuilder->resetSelect()->shouldBeCalled();
         $selectBuilder->build($queryBuilder, $resourceDefinition, $criteria)->shouldBeCalled();
         $paginatingBuilder->build($queryBuilder, $criteria->getPaginating())->shouldBeCalled();
         $orderingsBuilder->build($queryBuilder, $resourceDefinition, $criteria->getOrderings())->shouldBeCalled();
-        $queryBuilder->fetchAll()->willReturn(json_encode($items));
+        $queryBuilder->fetchAll()->willReturn($items);
 
         $this->add(self::RESOURCE_NAME, $resourceDefinition, $selectBuilder);
-        $this->match($criteria)->shouldBe(json_encode(array(
+        $this->match($criteria)->shouldBe(array(
             'items' => $items,
             'page' => array(
                 'current_page' => self::CURRENT_PAGE,
@@ -97,6 +97,6 @@ class SearchEngineSpec extends ObjectBehavior
                 'total_elements' => self::TOTAL_ELEMENTS,
                 'total_pages' => self::TOTAL_PAGES,
             ),
-        )));
+        ));
     }
 }

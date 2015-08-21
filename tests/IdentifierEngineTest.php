@@ -45,7 +45,7 @@ class IdentifierEngineTest extends PHPUnit_Framework_TestCase
             'id' => 1,
             'title' => 'Big Title',
             'author_id' => 1,
-        ), json_decode($results, true));
+        ), $results);
     }
 
     /**
@@ -71,7 +71,7 @@ class IdentifierEngineTest extends PHPUnit_Framework_TestCase
             'id' => 1,
             'title' => 'Big Title',
             'author_id' => 1,
-        ), json_decode($results, true));
+        ), $results);
     }
 
     /**
@@ -86,7 +86,7 @@ class IdentifierEngineTest extends PHPUnit_Framework_TestCase
             'id' => 1,
             'title' => 'Big Title',
             'author_id' => 1,
-        ), json_decode($results, true));
+        ), $results);
     }
 
     /**
@@ -100,10 +100,10 @@ class IdentifierEngineTest extends PHPUnit_Framework_TestCase
         self::assertSame(array(
             'id' => 1,
             'title' => 'Big Title',
-            'author' => array(
+            'author' => json_encode(array(
                 'id' => 1,
                 'name' => 'Nate',
-            ),
-        ), json_decode($results, true));
+            )),
+        ), $results);
     }
 }

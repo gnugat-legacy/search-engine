@@ -71,7 +71,7 @@ class SearchEngineTest extends PHPUnit_Framework_TestCase
                 'total_elements' => 4,
                 'total_pages' => 1,
             ),
-        ), json_decode($results, true));
+        ), $results);
     }
 
     /**
@@ -106,7 +106,7 @@ class SearchEngineTest extends PHPUnit_Framework_TestCase
                 'total_elements' => 3,
                 'total_pages' => 1,
             ),
-        ), json_decode($results, true));
+        ), $results);
     }
 
     /**
@@ -136,7 +136,7 @@ class SearchEngineTest extends PHPUnit_Framework_TestCase
                 'total_elements' => 2,
                 'total_pages' => 1,
             ),
-        ), json_decode($results, true));
+        ), $results);
     }
 
     /**
@@ -161,7 +161,7 @@ class SearchEngineTest extends PHPUnit_Framework_TestCase
                 'total_elements' => 4,
                 'total_pages' => 4,
             ),
-        ), json_decode($results, true));
+        ), $results);
     }
 
     /**
@@ -201,7 +201,7 @@ class SearchEngineTest extends PHPUnit_Framework_TestCase
                 'total_elements' => 4,
                 'total_pages' => 1,
             ),
-        ), json_decode($results, true));
+        ), $results);
     }
 
     /**
@@ -217,34 +217,34 @@ class SearchEngineTest extends PHPUnit_Framework_TestCase
                 array(
                     'id' => 1,
                     'title' => 'Big Title',
-                    'author' => array(
+                    'author' => json_encode(array(
                         'id' => 1,
                         'name' => 'Nate',
-                    ),
+                    )),
                 ),
                 array(
                     'id' => 2,
                     'title' => 'Big Header',
-                    'author' => array(
+                    'author' => json_encode(array(
                         'id' => 2,
                         'name' => 'Nicolas',
-                    ),
+                    )),
                 ),
                 array(
                     'id' => 3,
                     'title' => 'Ancient Title',
-                    'author' => array(
+                    'author' => json_encode(array(
                         'id' => 1,
                         'name' => 'Nate',
-                    ),
+                    )),
                 ),
                 array(
                     'id' => 4,
                     'title' => 'Ancient Header',
-                    'author' => array(
+                    'author' => json_encode(array(
                         'id' => 3,
                         'name' => 'Lorel',
-                    ),
+                    )),
                 ),
             ),
             'page' => array(
@@ -253,6 +253,6 @@ class SearchEngineTest extends PHPUnit_Framework_TestCase
                 'total_elements' => 4,
                 'total_pages' => 1,
             ),
-        ), json_decode($results, true));
+        ), $results);
     }
 }
