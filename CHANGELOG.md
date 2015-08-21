@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 0.2.0: array results
+
+Previously, results were returned as encoded JSON.
+
 ## 0.1.0: Proof Of Concept
 
 * IdentifierEngine can:
