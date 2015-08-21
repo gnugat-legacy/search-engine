@@ -120,7 +120,7 @@ class QueryBuilder
      */
     public function fetchAll()
     {
-        $this->fetcher->fetchAll($this->buildSql(), $this->parameters);
+        return $this->fetcher->fetchAll($this->buildSql(), $this->parameters);
     }
 
     /**
@@ -128,7 +128,7 @@ class QueryBuilder
      */
     public function fetchFirst()
     {
-        $this->fetcher->fetchFirst($this->buildSql(), $this->parameters);
+        return $this->fetcher->fetchFirst($this->buildSql(), $this->parameters);
     }
 
     /**
