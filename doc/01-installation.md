@@ -2,11 +2,13 @@
 
 Download SearchEngine using [Composer](https://getcomposer.org/download):
 
-    composer require gnugat/search-engine:^0.1
+    composer require gnugat/search-engine:^0.2
 
 You'll also need to choose one of the following implementations:
 
-* none yet :( (possible implementations: PDO, Pomm Foundation, Doctrine DBAL, Doctrine ORM, etc)
+* [PommSearchEngine](https://github.com/gnugat/pomm-search-engine), a [Pomm Foundation](http://www.pomm-project.org/) implementation
+
+Other possible implementations: PDO, Doctrine DBAL, Doctrine ORM, etc.
 
 ## Instantiation
 
