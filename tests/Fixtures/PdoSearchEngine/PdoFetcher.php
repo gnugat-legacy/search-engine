@@ -45,10 +45,7 @@ class PdoFetcher implements Fetcher
      */
     public function fetchAll($sql, array $parameters)
     {
-        $wrappedSql = 'SELECT array_to_json(array_agg(row_to_json(t))) FROM ('.$sql.') t';
-        $result = $this->getPDOStatement($wrappedSql, $parameters)->fetch(PDO::FETCH_ASSOC);
-
-        return (true === isset($result['array_to_json']) && null !== $result['array_to_json']) ? $result['array_to_json'] : '[]';
+        return $this->getPDOStatement($sql, $parameters)->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -56,10 +53,9 @@ class PdoFetcher implements Fetcher
      */
     public function fetchFirst($sql, array $parameters)
     {
-        $wrappedSql = 'SELECT row_to_json(t) FROM ('.$sql.') t';
-        $result = $this->getPDOStatement($wrappedSql, $parameters)->fetch(PDO::FETCH_ASSOC);
+        $result = $this->getPDOStatement($sql, $parameters)->fetch(PDO::FETCH_ASSOC);
 
-        return (true === isset($result['row_to_json']) && null !== $result['row_to_json']) ? $result['row_to_json'] : null;
+        return false !== $result ? $result : null;
     }
 
     /**
