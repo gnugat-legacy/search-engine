@@ -8,6 +8,9 @@ cache:
 
 services: postgresql
 
+addons:
+  postgresql: "9.2"
+
 php:
     - 5.3
     - 5.4

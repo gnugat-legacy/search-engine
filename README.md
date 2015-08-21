@@ -1,4 +1,4 @@
-# Search Engine
+# Search Engine [![SensioLabsInsight](https://insight.sensiolabs.com/projects/0bf23baf-b278-4be1-9e20-0a12472bb0ed/mini.png)](https://insight.sensiolabs.com/projects/0bf23baf-b278-4be1-9e20-0a12472bb0ed)
 
 A Proof Of Concept demonstrating how to handle Interrogatory Messages.
 
