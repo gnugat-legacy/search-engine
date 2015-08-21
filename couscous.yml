@@ -15,3 +15,9 @@ menu:
         home:
             text: Home
             relativeUrl:
+        installation:
+            text: Installation
+            relativeUrl: doc/01-installation.html
+        extending:
+            text: Extending
+            relativeUrl: doc/02-extending.html
