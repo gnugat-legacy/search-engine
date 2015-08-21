@@ -45,6 +45,19 @@ class Build
     /**
      * @param Fetcher $fetcher
      *
+     * @return IdentifierEngine
+     */
+    public static function identifierEngine(Fetcher $fetcher)
+    {
+        return new IdentifierEngine(
+            self::filteringBuilder(),
+            new \Gnugat\SearchEngine\Builder\QueryBuilderFactory($fetcher)
+        );
+    }
+
+    /**
+     * @param Fetcher $fetcher
+     *
      * @return SearchEngine
      */
     public static function searchEngine(Fetcher $fetcher)

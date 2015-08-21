@@ -56,7 +56,10 @@ class PdoFetcher implements Fetcher
      */
     public function fetchFirst($sql, array $parameters)
     {
-        return $this->getPDOStatement($sql, $parameters)->fetch(PDO::FETCH_ASSOC);
+        $wrappedSql = 'SELECT row_to_json(t) FROM ('.$sql.') t';
+        $result = $this->getPDOStatement($wrappedSql, $parameters)->fetch(PDO::FETCH_ASSOC);
+
+        return (true === isset($result['row_to_json']) && null !== $result['row_to_json']) ? $result['row_to_json'] : null;
     }
 
     /**

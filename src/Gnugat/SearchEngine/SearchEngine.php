@@ -89,7 +89,7 @@ class SearchEngine
         $this->filteringBuilder->build($queryBuilder, $resourceDefinition, $criteria->getFiltering());
 
         $queryBuilder->addSelect('COUNT(id) AS total');
-        $countResults = $queryBuilder->fetchFirst();
+        $countResults = json_decode($queryBuilder->fetchFirst(), true);
         $totalElements = (int) $countResults['total'];
         $totalPages = (int) ceil($totalElements / $perPage);
 
