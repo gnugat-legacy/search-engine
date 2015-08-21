@@ -46,6 +46,11 @@ class QueryBuilder
         $this->query['select'][] = $select;
     }
 
+    public function resetSelect()
+    {
+        unset($this->query['select']);
+    }
+
     /**
      * @param string $from
      */

@@ -56,6 +56,17 @@ class QueryBuilderSpec extends ObjectBehavior
         $this->fetchAll();
     }
 
+    function it_can_reset_the_select_choice(Fetcher $fetcher)
+    {
+        $fetcher->fetchAll('SELECT * FROM resource', array())->shouldBeCalled();
+
+        $this->addSelect('id');
+        $this->addSelect('name');
+        $this->resetSelect();
+        $this->from('resource');
+        $this->fetchAll();
+    }
+
     function it_can_count_elements(Fetcher $fetcher)
     {
         $fetcher->fetchFirst('SELECT COUNT(id) AS total FROM resource', array())->shouldBeCalled();

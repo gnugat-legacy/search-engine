@@ -82,6 +82,7 @@ class SearchEngineSpec extends ObjectBehavior
         $queryBuilder->addSelect('COUNT(id) AS total')->shouldBeCalled();
         $queryBuilder->fetchFirst()->willReturn($countResult);
 
+        $queryBuilder->resetSelect()->shouldBeCalled();
         $selectBuilder->build($queryBuilder, $resourceDefinition, $criteria)->shouldBeCalled();
         $paginatingBuilder->build($queryBuilder, $criteria->getPaginating())->shouldBeCalled();
         $orderingsBuilder->build($queryBuilder, $resourceDefinition, $criteria->getOrderings())->shouldBeCalled();

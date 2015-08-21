@@ -93,6 +93,7 @@ class SearchEngine
         $totalElements = (int) $countResults['total'];
         $totalPages = (int) ceil($totalElements / $perPage);
 
+        $queryBuilder->resetSelect();
         $selectBuilder->build($queryBuilder, $resourceDefinition, $criteria);
         $this->paginatingBuilder->build($queryBuilder, $paginating);
         $this->orderingsBuilder->build($queryBuilder, $resourceDefinition, $criteria->getOrderings());
