@@ -12,7 +12,6 @@
 namespace spec\Gnugat\SearchEngine;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class ResourceDefinitionSpec extends ObjectBehavior
 {

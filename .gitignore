@@ -4,3 +4,4 @@
 /phpunit.xml
 /phpspec.yml
 /.couscous
+/tests/Fixtures/Project/config.yml
