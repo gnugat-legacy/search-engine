@@ -56,45 +56,34 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <h1>How to contribute</h1>
-<p>Everybody should be able to help. Here's how you can make this project more
-awesome:</p>
-<ol>
-<li><a href="https://github.com/gnugat/search-engine/fork_select">Fork it</a></li>
-<li>improve it</li>
-<li>submit a <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a></li>
-</ol>
-<p>Your work will then be reviewed as soon as possible (suggestions about some
-changes, improvements or alternatives may be given).</p>
-<p>Here's some tips to make you the best contributor ever:</p>
+                    <h1 id="changes-between-versions">Changes between versions</h1>
+<h2 id="022-integer-limit">0.2.2: Integer limit</h2>
 <ul>
-<li><a href="#green-tests">Green tests</a></li>
-<li><a href="#standard-code">Standard code</a></li>
-<li><a href="#keeping-your-fork-up-to-date">Keeping your fork up-to-date</a></li>
+<li>added maximum (2147483647) and minimum (-2147483648) limit to integers</li>
 </ul>
-<h2>Green tests</h2>
-<p>Run the tests using the following script:</p>
-<pre><code>bin/test.sh</code></pre>
-<blockquote>
-<p><strong>Note</strong>: Tests also provide a living documentation: <code>phpunit --testdox; phpspec run -f pretty</code>.</p>
-</blockquote>
-<h2>Standard code</h2>
-<p>Use <a href="http://cs.sensiolabs.org/">PHP CS fixer</a> to make your code compliant with
-SearchEngine's coding standards:</p>
-<pre><code>php-cs-fixer fix src; php-cs-fixer fix tests; php-cs-fixer fix spec --fixers=-visibility</code></pre>
-<h2>Keeping your fork up-to-date</h2>
-<p>To keep your fork up-to-date, you should track the upstream (original) one
-using the following command:</p>
-<pre><code>git remote add upstream https://github.com/gnugat/search-engine.git</code></pre>
-<p>Then get the upstream changes:</p>
-<pre><code>git checkout master
-git pull --rebase origin master
-git pull --rebase upstream master
-git checkout &lt;your-branch&gt;
-git rebase master</code></pre>
-<p>Finally, publish your changes:</p>
-<pre><code>git push -f origin &lt;your-branch&gt;</code></pre>
-<p>Your pull request will be automatically updated.</p>
+<h2 id="021-pomm-implementation">0.2.1: Pomm implementation</h2>
+<ul>
+<li>added link to <a href="https://github.com/gnugat/pomm-search-engine">PommSearchEngine</a>, a <a href="http://www.pomm-project.org/">Pomm Foundation</a> implementation</li>
+</ul>
+<h2 id="020-array-results">0.2.0: array results</h2>
+<p>Previously, results were returned as encoded JSON.</p>
+<h2 id="010-proof-of-concept">0.1.0: Proof Of Concept</h2>
+<ul>
+<li>IdentifierEngine can:
+<ul>
+<li>embed relations</li>
+<li>filter string with a case insensitive regex (for Postgres only)</li>
+<li>filter ID and booleans by equality</li>
+<li>filter ranges (plural name, comma separated list: <code>author_ids=1,2,3</code>)</li>
+</ul></li>
+<li>SearchEngine can do the same things, plus:
+<ul>
+<li>order many fields, with direction (prefix with <code>-</code> for DESCendant ordering)</li>
+<li>paginate results with total information</li>
+</ul></li>
+<li>Fetcher interface allows integration with &quot;database library&quot; of choice (e.g. PDO, Pomm, Doctrine, etc)</li>
+<li>FilteringBuilderStrategy interface allows vendor specific or domain specific filtering</li>
+</ul>
                 </section>
 
             </div>

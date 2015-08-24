@@ -56,31 +56,45 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <h1>Versioning and branching models</h1>
-<p>This file explains the versioning and branching models of this project.</p>
-<h2>Versioning</h2>
-<p>The versioning is inspired by <a href="http://semver.org/">Semantic Versioning</a>:</p>
-<blockquote>
-<p>Given a version number MAJOR.MINOR.PATCH, increment the:</p>
+                    <h1 id="how-to-contribute">How to contribute</h1>
+<p>Everybody should be able to help. Here's how you can make this project more
+awesome:</p>
 <ol>
-<li>MAJOR version when you make incompatible API changes</li>
-<li>MINOR version when you add functionality in a backwards-compatible manner</li>
-<li>PATCH version when you make backwards-compatible bug fixes</li>
+<li><a href="https://github.com/gnugat/search-engine/fork_select">Fork it</a></li>
+<li>improve it</li>
+<li>submit a <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a></li>
 </ol>
-</blockquote>
-<h3>Public API</h3>
-<p>Classes and methods marked with the <code>@api</code> tag are considered to be the public
-API of this project.</p>
-<h2>Branching Model</h2>
-<p>The branching is inspired by <a href="https://github.com/jbenet">@jbenet</a>
-<a href="https://gist.github.com/jbenet/ee6c9ac48068889b0912">simple git branching model</a>:</p>
+<p>Your work will then be reviewed as soon as possible (suggestions about some
+changes, improvements or alternatives may be given).</p>
+<p>Here's some tips to make you the best contributor ever:</p>
+<ul>
+<li><a href="#green-tests">Green tests</a></li>
+<li><a href="#standard-code">Standard code</a></li>
+<li><a href="#keeping-your-fork-up-to-date">Keeping your fork up-to-date</a></li>
+</ul>
+<h2 id="green-tests">Green tests</h2>
+<p>Run the tests using the following script:</p>
+<pre><code>bin/test.sh</code></pre>
 <blockquote>
-<ol>
-<li><code>master</code> must always be deployable.</li>
-<li><strong>all changes</strong> are made through feature branches (pull-request + merge)</li>
-<li>rebase to avoid/resolve conflicts; merge in to <code>master</code></li>
-</ol>
+<p><strong>Note</strong>: Tests also provide a living documentation: <code>phpunit --testdox; phpspec run -f pretty</code>.</p>
 </blockquote>
+<h2 id="standard-code">Standard code</h2>
+<p>Use <a href="http://cs.sensiolabs.org/">PHP CS fixer</a> to make your code compliant with
+SearchEngine's coding standards:</p>
+<pre><code>php-cs-fixer fix src; php-cs-fixer fix tests; php-cs-fixer fix spec --fixers=-visibility</code></pre>
+<h2 id="keeping-your-fork-up-to-date">Keeping your fork up-to-date</h2>
+<p>To keep your fork up-to-date, you should track the upstream (original) one
+using the following command:</p>
+<pre><code>git remote add upstream https://github.com/gnugat/search-engine.git</code></pre>
+<p>Then get the upstream changes:</p>
+<pre><code>git checkout master
+git pull --rebase origin master
+git pull --rebase upstream master
+git checkout &lt;your-branch&gt;
+git rebase master</code></pre>
+<p>Finally, publish your changes:</p>
+<pre><code>git push -f origin &lt;your-branch&gt;</code></pre>
+<p>Your pull request will be automatically updated.</p>
                 </section>
 
             </div>

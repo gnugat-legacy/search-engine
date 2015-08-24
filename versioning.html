@@ -56,30 +56,31 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <h1>Changes between versions</h1>
-<h2>0.2.1: Pomm implementation</h2>
-<ul>
-<li>added link to <a href="https://github.com/gnugat/pomm-search-engine">PommSearchEngine</a>, a <a href="http://www.pomm-project.org/">Pomm Foundation</a> implementation</li>
-</ul>
-<h2>0.2.0: array results</h2>
-<p>Previously, results were returned as encoded JSON.</p>
-<h2>0.1.0: Proof Of Concept</h2>
-<ul>
-<li>IdentifierEngine can:
-<ul>
-<li>embed relations</li>
-<li>filter string with a case insensitive regex (for Postgres only)</li>
-<li>filter ID and booleans by equality</li>
-<li>filter ranges (plural name, comma separated list: <code>author_ids=1,2,3</code>)</li>
-</ul></li>
-<li>SearchEngine can do the same things, plus:
-<ul>
-<li>order many fields, with direction (prefix with <code>-</code> for DESCendant ordering)</li>
-<li>paginate results with total information</li>
-</ul></li>
-<li>Fetcher interface allows integration with &quot;database library&quot; of choice (e.g. PDO, Pomm, Doctrine, etc)</li>
-<li>FilteringBuilderStrategy interface allows vendor specific or domain specific filtering</li>
-</ul>
+                    <h1 id="versioning-and-branching-models">Versioning and branching models</h1>
+<p>This file explains the versioning and branching models of this project.</p>
+<h2 id="versioning">Versioning</h2>
+<p>The versioning is inspired by <a href="http://semver.org/">Semantic Versioning</a>:</p>
+<blockquote>
+<p>Given a version number MAJOR.MINOR.PATCH, increment the:</p>
+<ol>
+<li>MAJOR version when you make incompatible API changes</li>
+<li>MINOR version when you add functionality in a backwards-compatible manner</li>
+<li>PATCH version when you make backwards-compatible bug fixes</li>
+</ol>
+</blockquote>
+<h3 id="public-api">Public API</h3>
+<p>Classes and methods marked with the <code>@api</code> tag are considered to be the public
+API of this project.</p>
+<h2 id="branching-model">Branching Model</h2>
+<p>The branching is inspired by <a href="https://github.com/jbenet">@jbenet</a>
+<a href="https://gist.github.com/jbenet/ee6c9ac48068889b0912">simple git branching model</a>:</p>
+<blockquote>
+<ol>
+<li><code>master</code> must always be deployable.</li>
+<li><strong>all changes</strong> are made through feature branches (pull-request + merge)</li>
+<li>rebase to avoid/resolve conflicts; merge in to <code>master</code></li>
+</ol>
+</blockquote>
                 </section>
 
             </div>

@@ -56,7 +56,7 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <h1>Search Engine <a href="https://insight.sensiolabs.com/projects/0bf23baf-b278-4be1-9e20-0a12472bb0ed"><img src="https://insight.sensiolabs.com/projects/0bf23baf-b278-4be1-9e20-0a12472bb0ed/mini.png" alt="SensioLabsInsight" /></a> <a href="https://travis-ci.org/gnugat/search-engine"><img src="https://travis-ci.org/gnugat/search-engine.svg?branch=master" alt="Build Status" /></a></h1>
+                    <h1 id="search-engine">Search Engine <a href="https://insight.sensiolabs.com/projects/0bf23baf-b278-4be1-9e20-0a12472bb0ed"><img src="https://insight.sensiolabs.com/projects/0bf23baf-b278-4be1-9e20-0a12472bb0ed/mini.png" alt="SensioLabsInsight" /></a> <a href="https://travis-ci.org/gnugat/search-engine"><img src="https://travis-ci.org/gnugat/search-engine.svg?branch=master" alt="Build Status" /></a></h1>
 <p>A Proof Of Concept demonstrating how to handle Interrogatory Messages.</p>
 <p>The <a href="http://martinfowler.com/bliki/CQRS.html">Command / Query Responsibility Segregation</a>
 principle explains that Imperative and Interrogatory messages shouldn't be mixed together.</p>
@@ -71,7 +71,7 @@ would try to return results matching a given criteria.</p>
 <p><strong>Caution</strong>: this component does not provide actual SearchEngine features,
 if you're looking for one you should rather have a look at ElasticSearch, Solr, etc.</p>
 </blockquote>
-<h2>Installation</h2>
+<h2 id="installation">Installation</h2>
 <p>Download SearchEngine using <a href="https://getcomposer.org/download">Composer</a>:</p>
 <pre><code>composer require gnugat/search-engine:^0.2</code></pre>
 <p>You'll also need to choose one of the following implementations:</p>
@@ -82,7 +82,7 @@ if you're looking for one you should rather have a look at ElasticSearch, Solr, 
 <blockquote>
 <p><strong>Note</strong>: For more information about how to instantiate the classes, see <a href="doc/01-installation.html">the installation documentation</a>.</p>
 </blockquote>
-<h2>Usage</h2>
+<h2 id="usage">Usage</h2>
 <p><code>SearchEngine</code> expects a <code>Criteria</code> object which describes:</p>
 <ul>
 <li>the resource to query</li>
@@ -132,7 +132,7 @@ print_r($searchEngine-&gt;match($criteria));</code></pre>
         'total_pages' =&gt; 1,
     ),
 )</code></pre>
-<h2>Features</h2>
+<h2 id="features">Features</h2>
 <ul>
 <li>embeding relations</li>
 <li>filtering string with a case insensitive regex</li>
@@ -141,18 +141,18 @@ print_r($searchEngine-&gt;match($criteria));</code></pre>
 <li>ordering many fields, with direction (prefix with <code>-</code> for DESCendant ordering)</li>
 <li>paginating results with total information</li>
 </ul>
-<h2>Further documentation</h2>
+<h2 id="further-documentation">Further documentation</h2>
 <p>You can see the current and past versions using one of the following:</p>
 <ul>
 <li>the <code>git tag</code> command</li>
 <li>the <a href="https://github.com/gnugat/search-engine/releases">releases page on Github</a></li>
-<li>the file listing the <a href="CHANGELOG.html">changes between versions</a></li>
+<li>the file listing the <a href="changelog.html">changes between versions</a></li>
 </ul>
 <p>You can find more documentation at the following links:</p>
 <ul>
 <li><a href="LICENSE">copyright and MIT license</a></li>
-<li><a href="VERSIONING.html">versioning and branching models</a></li>
-<li><a href="CONTRIBUTING.html">contribution instructions</a></li>
+<li><a href="versioning.html">versioning and branching models</a></li>
+<li><a href="contributing.html">contribution instructions</a></li>
 </ul>
 <p>Next readings:</p>
 <ul>

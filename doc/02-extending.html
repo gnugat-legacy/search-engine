@@ -56,13 +56,13 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <h1>Extending</h1>
+                    <h1 id="extending">Extending</h1>
 <p>SearchEngine can be extended in many ways:</p>
 <ul>
 <li><a href="#fetcher">Fetcher</a></li>
 <li><a href="#filteringbuilderstrategy">FilteringBuilderStrategy</a></li>
 </ul>
-<h2>Fetcher</h2>
+<h2 id="fetcher">Fetcher</h2>
 <p>With a bit of luck, your favorite &quot;database library&quot; would have been integrated
 with SearchEngine already. If it's not the case, don't panic! It's as simple as
 implementing <code>Fetcher</code>.</p>
@@ -116,7 +116,7 @@ class PdoFetcher implements Fetcher
     }
 }</code></pre>
 <p>Possible implementation could be: PDO, Pomm Foundation, Doctrine DBAL, Doctrine ORM, etc.</p>
-<h2>FilteringBuilderStrategy</h2>
+<h2 id="filteringbuilderstrategy">FilteringBuilderStrategy</h2>
 <p>In order to filter resulsts, SearchEngine relies on implementations of <code>FilteringBuilderStrategy</code>.</p>
 <p>Out of the box it provides the following vendor agnostic implementations:</p>
 <ul>
