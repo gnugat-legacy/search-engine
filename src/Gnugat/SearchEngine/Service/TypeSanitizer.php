@@ -15,16 +15,27 @@ use Gnugat\SearchEngine\ResourceDefinition;
 
 class TypeSanitizer
 {
+    const MINIMUM_INTEGER = -2147483648;
+    const MAXIMUM_INTEGER = 2147483647;
+
     /**
      * @param string $value
-     * @param mixed  $type
+     * @param string $type
      *
      * @return mixed
      */
     public function sanitize($value, $type)
     {
         if (ResourceDefinition::TYPE_INTEGER === $type) {
-            return (int) $value;
+            $integer = (int) $value;
+            if (self::MINIMUM_INTEGER > $integer) {
+                return self::MINIMUM_INTEGER;
+            }
+            if (self::MAXIMUM_INTEGER < $integer) {
+                return self::MAXIMUM_INTEGER;
+            }
+
+            return $integer;
         }
         if (ResourceDefinition::TYPE_BOOLEAN === $type) {
             return 'false' === $value ? false : (bool) $value;
