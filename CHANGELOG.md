@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 0.2.2: Integer limit
+
+* added maximum (2147483647) and minimum (-2147483648) limit to integers
+
 ## 0.2.1: Pomm implementation
 
 * added link to [PommSearchEngine](https://github.com/gnugat/pomm-search-engine), a [Pomm Foundation](http://www.pomm-project.org/) implementation
