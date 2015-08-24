@@ -12,6 +12,7 @@
 namespace spec\Gnugat\SearchEngine\Service;
 
 use Gnugat\SearchEngine\ResourceDefinition;
+use Gnugat\SearchEngine\Service\TypeSanitizer;
 use PhpSpec\ObjectBehavior;
 
 class TypeSanitizerSpec extends ObjectBehavior
@@ -40,6 +41,11 @@ class TypeSanitizerSpec extends ObjectBehavior
     function it_sanitizes_integers()
     {
         $this->sanitize(42, ResourceDefinition::TYPE_INTEGER)->shouldBe(42);
+
+        $this->sanitize(TypeSanitizer::MAXIMUM_INTEGER, ResourceDefinition::TYPE_INTEGER)->shouldBe(TypeSanitizer::MAXIMUM_INTEGER);
+        $this->sanitize(TypeSanitizer::MAXIMUM_INTEGER + 1, ResourceDefinition::TYPE_INTEGER)->shouldBe(TypeSanitizer::MAXIMUM_INTEGER);
+        $this->sanitize(TypeSanitizer::MINIMUM_INTEGER, ResourceDefinition::TYPE_INTEGER)->shouldBe(TypeSanitizer::MINIMUM_INTEGER);
+        $this->sanitize(TypeSanitizer::MINIMUM_INTEGER - 1, ResourceDefinition::TYPE_INTEGER)->shouldBe(TypeSanitizer::MINIMUM_INTEGER);
 
         $this->sanitize('42', ResourceDefinition::TYPE_INTEGER)->shouldBe(42);
         $this->sanitize('42.3', ResourceDefinition::TYPE_INTEGER)->shouldBe(42);
