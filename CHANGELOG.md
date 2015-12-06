@@ -1,5 +1,11 @@
 # Changes between versions
 
+## 0.2.3: PHP 7
+
+* added support for PHP 7
+* added support for PHPUnit 5 (tests)
+* added support for Symfony 3 (tests)
+
 ## 0.2.2: Integer limit
 
 * added maximum (2147483647) and minimum (-2147483648) limit to integers
