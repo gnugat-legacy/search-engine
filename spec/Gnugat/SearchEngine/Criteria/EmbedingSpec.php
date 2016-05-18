@@ -20,13 +20,38 @@ class EmbedingSpec extends ObjectBehavior
 
     function let()
     {
-        $relations = array(self::RELATION);
+        $relations = [self::RELATION];
 
         $this->beConstructedWith($relations);
     }
 
     function it_has_relations()
     {
-        $this->getRelations()->shouldBe(array(self::RELATION));
+        $this->relations->shouldBe([self::RELATION]);
+    }
+
+    function it_ignores_query_parameters_without_relations()
+    {
+        $this->beConstructedFromQueryParameters([]);
+
+        $this->relations->shouldBe([]);
+    }
+
+    function it_extracts_one_relation_from_query_parameters()
+    {
+        $this->beConstructedFromQueryParameters([
+            'embed' => 'relation',
+        ]);
+
+        $this->relations->shouldBe(['relation']);
+    }
+
+    function it_extracts_many_relations_from_query_parameters()
+    {
+        $this->beConstructedFromQueryParameters([
+            'embed' => 'one,two,three',
+        ]);
+
+        $this->relations->shouldBe(['one', 'two', 'three']);
     }
 }

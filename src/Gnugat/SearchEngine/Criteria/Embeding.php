@@ -13,24 +13,24 @@ namespace Gnugat\SearchEngine\Criteria;
 
 class Embeding
 {
-    /**
-     * @var array
-     */
-    private $relations;
+    public $relations;
 
-    /**
-     * @param array $relations
-     */
     public function __construct(array $relations)
     {
         $this->relations = $relations;
     }
 
-    /**
-     * @return array
-     */
-    public function getRelations()
+    public static function fromQueryParameters(array $queryParameters) : self
     {
-        return $this->relations;
+        if (false === isset($queryParameters['embed'])) {
+            return new self([]);
+        }
+
+        return new self(explode(',', $queryParameters['embed']));
+    }
+
+    public function has(string $relation) : bool
+    {
+        return in_array($relation, $this->relations, true);
     }
 }

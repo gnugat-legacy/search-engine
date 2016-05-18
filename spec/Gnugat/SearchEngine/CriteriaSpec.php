@@ -13,7 +13,7 @@ namespace spec\Gnugat\SearchEngine;
 
 use Gnugat\SearchEngine\Criteria\Embeding;
 use Gnugat\SearchEngine\Criteria\Filtering;
-use Gnugat\SearchEngine\Criteria\Ordering;
+use Gnugat\SearchEngine\Criteria\Orderings;
 use Gnugat\SearchEngine\Criteria\Paginating;
 use PhpSpec\ObjectBehavior;
 
@@ -21,39 +21,43 @@ class CriteriaSpec extends ObjectBehavior
 {
     const RESOURCE_NAME = 'resource';
 
-    function let(Embeding $embeding, Filtering $filtering, Ordering $ordering, Paginating $paginating)
-    {
+    function let(
+        Embeding $embeding,
+        Filtering $filtering,
+        Orderings $orderings,
+        Paginating $paginating
+    ) {
         $this->beConstructedWith(
             self::RESOURCE_NAME,
             $embeding,
             $filtering,
-            $paginating,
-            array($ordering)
+            $orderings,
+            $paginating
         );
     }
 
     function it_has_resource_name()
     {
-        $this->getResourceName()->shouldBe(self::RESOURCE_NAME);
+        $this->resourceName->shouldBe(self::RESOURCE_NAME);
     }
 
     function it_has_embeding(Embeding $embeding)
     {
-        $this->getEmbeding()->shouldBe($embeding);
+        $this->embeding->shouldBe($embeding);
     }
 
     function it_has_filtering(Filtering $filtering)
     {
-        $this->getFiltering()->shouldBe($filtering);
+        $this->filtering->shouldBe($filtering);
     }
 
-    function it_has_orderings(Ordering $ordering)
+    function it_has_orderings(Orderings $orderings)
     {
-        $this->getOrderings()->shouldBe(array($ordering));
+        $this->orderings->shouldBe($orderings);
     }
 
     function it_has_paginating(Paginating $paginating)
     {
-        $this->getPaginating()->shouldBe($paginating);
+        $this->paginating->shouldBe($paginating);
     }
 }

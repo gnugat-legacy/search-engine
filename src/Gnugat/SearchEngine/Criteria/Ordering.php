@@ -13,39 +13,12 @@ namespace Gnugat\SearchEngine\Criteria;
 
 class Ordering
 {
-    /**
-     * @var string
-     */
-    private $field;
+    public $field;
+    public $direction;
 
-    /**
-     * @var string
-     */
-    private $direction;
-
-    /**
-     * @param string $field
-     * @param string $direction
-     */
-    public function __construct($field, $direction)
+    public function __construct(string $field, string $direction)
     {
         $this->field = $field;
         $this->direction = $direction;
-    }
-
-    /**
-     * @return string
-     */
-    public function getField()
-    {
-        return $this->field;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDirection()
-    {
-        return $this->direction;
     }
 }

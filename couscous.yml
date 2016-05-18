@@ -4,7 +4,7 @@ template:
 baseUrl: http://gnugat.github.io/search-engine
 
 title: SearchEngine
-subTitle: A POC library to handle interrogatory messages
+subTitle: Component that tries to help you get the Query part in CQRS right
 
 github:
     user: gnugat

@@ -25,11 +25,11 @@ class OrderingSpec extends ObjectBehavior
 
     function it_has_a_field()
     {
-        $this->getField()->shouldBe(self::FIELD);
+        $this->field->shouldBe(self::FIELD);
     }
 
     function it_has_a_direction()
     {
-        $this->getDirection()->shouldBe(self::DIRECTION);
+        $this->direction->shouldBe(self::DIRECTION);
     }
 }

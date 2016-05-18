@@ -11,157 +11,42 @@
 
 namespace Gnugat\SearchEngine\Test;
 
-use Gnugat\SearchEngine\Build;
-use Gnugat\SearchEngine\Builder\FilteringBuilderStrategy\RegexFilteringBuilderStrategy;
-use Gnugat\SearchEngine\Criteria\Paginating;
-use Gnugat\SearchEngine\Test\Fixtures\Project\ProjectBuild;
-use PHPUnit_Framework_TestCase;
+use Gnugat\SearchEngine\Criteria;
+use Gnugat\SearchEngine\Test\ArrayBuilder\{
+    OrderingBuilder,
+    ProfileNameFilteringBuilder,
+    SelectProfileBuilder
+};
+use Gnugat\SearchEngine\Test\ArrayImplementation\ArraySearchEngine;
 
-class SearchEngineTest extends PHPUnit_Framework_TestCase
+class SearchEngineTest extends \PHPUnit_Framework_TestCase
 {
-    private $criteriaFactory;
+    const DATA = [
+        'profile' => [
+            [
+                'id' => '168ac7f8-c918-4e99-90ee-5d7590fe61ce',
+                'name' => 'Arthur Dent',
+            ],
+            [
+                'id' => 'a426aef2-19e2-412a-8339-5458cf6ae416',
+                'name' => 'Ford Prefect',
+            ],
+            [
+                'id' => 'e3ad45ee-7cae-4cca-bd7b-2eb6b57b6457',
+                'name' => 'Trillian Astra',
+            ],
+        ],
+    ];
+
     private $searchEngine;
 
     protected function setUp()
     {
-        $fetcher = ProjectBuild::fetcher();
-        $blogResourceDefinition = ProjectBuild::blogResourceDefinition();
-        $blogSelectBuilder = ProjectBuild::blogSelectBuilder();
+        $this->searchEngine = new ArraySearchEngine(self::DATA);
 
-        Build::addFilteringBuilderStrategy(new RegexFilteringBuilderStrategy(), 20);
-        $this->criteriaFactory = Build::criteriaFactory();
-        $this->searchEngine = Build::searchEngine($fetcher);
-        $this->searchEngine->add('blog', $blogResourceDefinition, $blogSelectBuilder);
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_find_all_results()
-    {
-        $criteria = $this->criteriaFactory->fromQueryParameters('blog', array());
-        $results = $this->searchEngine->match($criteria);
-
-        self::assertSame(array(
-            'items' => array(
-                array(
-                    'id' => 1,
-                    'title' => 'Big Title',
-                    'author_id' => 1,
-                ),
-                array(
-                    'id' => 2,
-                    'title' => 'Big Header',
-                    'author_id' => 2,
-                ),
-                array(
-                    'id' => 3,
-                    'title' => 'Ancient Title',
-                    'author_id' => 1,
-                ),
-                array(
-                    'id' => 4,
-                    'title' => 'Ancient Header',
-                    'author_id' => 3,
-                ),
-            ),
-            'page' => array(
-                'current_page' => Paginating::DEFAULT_CURRENT_PAGE,
-                'per_page' => Paginating::DEFAULT_ITEMS_PER_PAGE,
-                'total_elements' => 4,
-                'total_pages' => 1,
-            ),
-        ), $results);
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_whitelist()
-    {
-        $criteria = $this->criteriaFactory->fromQueryParameters('blog', array('author_ids' => '1,3'));
-        $results = $this->searchEngine->match($criteria);
-
-        self::assertSame(array(
-            'items' => array(
-                array(
-                    'id' => 1,
-                    'title' => 'Big Title',
-                    'author_id' => 1,
-                ),
-                array(
-                    'id' => 3,
-                    'title' => 'Ancient Title',
-                    'author_id' => 1,
-                ),
-                array(
-                    'id' => 4,
-                    'title' => 'Ancient Header',
-                    'author_id' => 3,
-                ),
-            ),
-            'page' => array(
-                'current_page' => Paginating::DEFAULT_CURRENT_PAGE,
-                'per_page' => Paginating::DEFAULT_ITEMS_PER_PAGE,
-                'total_elements' => 3,
-                'total_pages' => 1,
-            ),
-        ), $results);
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_filter_using_case_insensitive_regex()
-    {
-        $criteria = $this->criteriaFactory->fromQueryParameters('blog', array('title' => 'IG'));
-        $results = $this->searchEngine->match($criteria);
-
-        self::assertSame(array(
-            'items' => array(
-                array(
-                    'id' => 1,
-                    'title' => 'Big Title',
-                    'author_id' => 1,
-                ),
-                array(
-                    'id' => 2,
-                    'title' => 'Big Header',
-                    'author_id' => 2,
-                ),
-            ),
-            'page' => array(
-                'current_page' => Paginating::DEFAULT_CURRENT_PAGE,
-                'per_page' => Paginating::DEFAULT_ITEMS_PER_PAGE,
-                'total_elements' => 2,
-                'total_pages' => 1,
-            ),
-        ), $results);
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_paginate()
-    {
-        $criteria = $this->criteriaFactory->fromQueryParameters('blog', array('page' => 2, 'per_page' => 1));
-        $results = $this->searchEngine->match($criteria);
-
-        self::assertSame(array(
-            'items' => array(
-                array(
-                    'id' => 2,
-                    'title' => 'Big Header',
-                    'author_id' => 2,
-                ),
-            ),
-            'page' => array(
-                'current_page' => 2,
-                'per_page' => 1,
-                'total_elements' => 4,
-                'total_pages' => 4,
-            ),
-        ), $results);
+        $this->searchEngine->add(new SelectProfileBuilder(), 500);
+        $this->searchEngine->add(new OrderingBuilder());
+        $this->searchEngine->add(new ProfileNameFilteringBuilder());
     }
 
     /**
@@ -169,90 +54,76 @@ class SearchEngineTest extends PHPUnit_Framework_TestCase
      */
     public function it_can_order()
     {
-        $criteria = $this->criteriaFactory->fromQueryParameters('blog', array('sort' => 'author_id,-title'));
-        $results = $this->searchEngine->match($criteria);
+        $criteria = Criteria::fromQueryParameters('profile', [
+            'sort' => '-id',
+        ]);
+        $result = $this->searchEngine->match($criteria);
+        $orderedProfiles = iterator_to_array($result->getIterator());
 
-        self::assertSame(array(
-            'items' => array(
-                array(
-                    'id' => 1,
-                    'title' => 'Big Title',
-                    'author_id' => 1,
-                ),
-                array(
-                    'id' => 3,
-                    'title' => 'Ancient Title',
-                    'author_id' => 1,
-                ),
-                array(
-                    'id' => 2,
-                    'title' => 'Big Header',
-                    'author_id' => 2,
-                ),
-                array(
-                    'id' => 4,
-                    'title' => 'Ancient Header',
-                    'author_id' => 3,
-                ),
-            ),
-            'page' => array(
-                'current_page' => Paginating::DEFAULT_CURRENT_PAGE,
-                'per_page' => Paginating::DEFAULT_ITEMS_PER_PAGE,
-                'total_elements' => 4,
-                'total_pages' => 1,
-            ),
-        ), $results);
+        self::assertSame(
+            [
+                [
+                    'id' => 'e3ad45ee-7cae-4cca-bd7b-2eb6b57b6457',
+                    'name' => 'Trillian Astra',
+                ],
+                [
+                    'id' => 'a426aef2-19e2-412a-8339-5458cf6ae416',
+                    'name' => 'Ford Prefect',
+                ],
+                [
+                    'id' => '168ac7f8-c918-4e99-90ee-5d7590fe61ce',
+                    'name' => 'Arthur Dent',
+                ],
+            ],
+            $orderedProfiles
+        );
     }
 
     /**
      * @test
      */
-    public function it_can_embed_relations()
+    public function it_can_filter()
     {
-        $criteria = $this->criteriaFactory->fromQueryParameters('blog', array('embed' => 'author'));
-        $results = $this->searchEngine->match($criteria);
+        $criteria = Criteria::fromQueryParameters('profile', [
+            'name' => 'Trillian Astra',
+        ]);
+        $result = $this->searchEngine->match($criteria);
+        $filteredProfiles = iterator_to_array($result->getIterator());
 
-        self::assertSame(array(
-            'items' => array(
-                array(
-                    'id' => 1,
-                    'title' => 'Big Title',
-                    'author' => json_encode(array(
-                        'id' => 1,
-                        'name' => 'Nate',
-                    )),
-                ),
-                array(
-                    'id' => 2,
-                    'title' => 'Big Header',
-                    'author' => json_encode(array(
-                        'id' => 2,
-                        'name' => 'Nicolas',
-                    )),
-                ),
-                array(
-                    'id' => 3,
-                    'title' => 'Ancient Title',
-                    'author' => json_encode(array(
-                        'id' => 1,
-                        'name' => 'Nate',
-                    )),
-                ),
-                array(
-                    'id' => 4,
-                    'title' => 'Ancient Header',
-                    'author' => json_encode(array(
-                        'id' => 3,
-                        'name' => 'Lorel',
-                    )),
-                ),
-            ),
-            'page' => array(
-                'current_page' => Paginating::DEFAULT_CURRENT_PAGE,
-                'per_page' => Paginating::DEFAULT_ITEMS_PER_PAGE,
-                'total_elements' => 4,
-                'total_pages' => 1,
-            ),
-        ), $results);
+        self::assertSame(
+            [
+                [
+                    'id' => 'e3ad45ee-7cae-4cca-bd7b-2eb6b57b6457',
+                    'name' => 'Trillian Astra',
+                ],
+            ],
+            $filteredProfiles
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_paginate()
+    {
+        $criteria = Criteria::fromQueryParameters('profile', [
+            'page' => 2,
+            'per_page' => 2,
+        ]);
+        $page = $this->searchEngine->match($criteria)->take(
+            $criteria->paginating->offset,
+            $criteria->paginating->itemsPerPage
+        );
+        $paginatedProfiles = iterator_to_array($page->getIterator());
+
+        self::assertSame(
+            [
+                [
+                    'id' => 'e3ad45ee-7cae-4cca-bd7b-2eb6b57b6457',
+                    'name' => 'Trillian Astra',
+                ],
+            ],
+            $paginatedProfiles
+        );
     }
 }
