@@ -9,10 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\SearchEngine;
+namespace Gnugat\SearchEngine\Test\ArrayImplementation;
 
-use DomainException;
+use Gnugat\SearchEngine\Criteria;
 
-class NoMatchException extends DomainException
+interface Builder
 {
+    public function supports(Criteria $criteria) : bool;
+    public function build(Criteria $criteria, array $data) : array;
 }

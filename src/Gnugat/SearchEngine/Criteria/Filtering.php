@@ -13,33 +13,31 @@ namespace Gnugat\SearchEngine\Criteria;
 
 class Filtering
 {
-    /**
-     * @var array
-     */
-    private $fields;
+    public $fields;
 
-    /**
-     * @param array $fields
-     */
     public function __construct(array $fields)
     {
         $this->fields = $fields;
     }
 
-    /**
-     * @return array
-     */
-    public function getFields()
+    public static function fromQueryParameters(array $queryParameters) : self
     {
-        return $this->fields;
+        $fields = $queryParameters;
+        unset($fields['embed']);
+        unset($fields['page']);
+        unset($fields['per_page']);
+        unset($fields['sort']);
+
+        return new self($fields);
     }
 
-    /**
-     * @param mixed $key
-     * @param mixed $value
-     */
-    public function addField($key, $value)
+    public function add($key, $value)
     {
         $this->fields[$key] = $value;
+    }
+
+    public function has($key) : bool
+    {
+        return isset($this->fields[$key]) && (false === empty($this->fields[$key]));
     }
 }

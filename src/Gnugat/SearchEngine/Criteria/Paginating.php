@@ -16,20 +16,10 @@ class Paginating
     const DEFAULT_CURRENT_PAGE = 1;
     const DEFAULT_ITEMS_PER_PAGE = 10;
 
-    /**
-     * @var int
-     */
-    private $currentPage;
+    public $currentPage;
+    public $itemsPerPage;
+    public $offset;
 
-    /**
-     * @var int
-     */
-    private $itemsPerPage;
-
-    /**
-     * @param int $currentPage
-     * @param int $itemsPerPage
-     */
     public function __construct($currentPage, $itemsPerPage)
     {
         $this->currentPage = (int) $currentPage;
@@ -43,27 +33,11 @@ class Paginating
         $this->offset = $this->currentPage * $this->itemsPerPage - $this->itemsPerPage;
     }
 
-    /**
-     * @return int
-     */
-    public function getCurrentPage()
+    public static function fromQueryParameters(array $queryParameters) : self
     {
-        return $this->currentPage;
-    }
+        $currentPage = $queryParameters['page'] ?? self::DEFAULT_CURRENT_PAGE;
+        $maximumResults = $queryParameters['per_page'] ?? self::DEFAULT_ITEMS_PER_PAGE;
 
-    /**
-     * @return int
-     */
-    public function getOffset()
-    {
-        return $this->offset;
-    }
-
-    /**
-     * @return int
-     */
-    public function getItemsPerPage()
-    {
-        return $this->itemsPerPage;
+        return new self($currentPage, $maximumResults);
     }
 }

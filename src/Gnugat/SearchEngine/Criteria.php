@@ -11,95 +11,43 @@
 
 namespace Gnugat\SearchEngine;
 
-use Gnugat\SearchEngine\Criteria\Embeding;
-use Gnugat\SearchEngine\Criteria\Filtering;
-use Gnugat\SearchEngine\Criteria\Paginating;
+use Gnugat\SearchEngine\Criteria\{
+    Embeding,
+    Filtering,
+    Orderings,
+    Paginating
+};
 
 class Criteria
 {
-    /**
-     * @var string
-     */
-    private $resourceName;
+    public $resourceName;
+    public $embeding;
+    public $filtering;
+    public $orderings;
+    public $paginating;
 
-    /**
-     * @var Embeding
-     */
-    private $embeding;
-
-    /**
-     * @var Filtering
-     */
-    private $filtering;
-
-    /**
-     * @var Paginating
-     */
-    private $paginating;
-
-    /**
-     * @var array
-     */
-    private $orderings;
-
-    /**
-     * @param string     $resourceName
-     * @param Embeding   $embeding
-     * @param Filtering  $filtering
-     * @param Paginating $paginating
-     * @param array      $orderings
-     */
     public function __construct(
-        $resourceName,
+        string $resourceName,
         Embeding $embeding,
         Filtering $filtering,
-        Paginating $paginating,
-        array $orderings
+        Orderings $orderings,
+        Paginating $paginating
     ) {
         $this->resourceName = $resourceName;
         $this->embeding = $embeding;
         $this->filtering = $filtering;
-        $this->paginating = $paginating;
         $this->orderings = $orderings;
+        $this->paginating = $paginating;
     }
 
-    /**
-     * @return string
-     */
-    public function getResourceName()
+    public static function fromQueryParameters(string $resourceName, array $queryParameters) : self
     {
-        return $this->resourceName;
-    }
-
-    /**
-     * @return Embeding
-     */
-    public function getEmbeding()
-    {
-        return $this->embeding;
-    }
-
-    /**
-     * @return Filtering
-     */
-    public function getFiltering()
-    {
-        return $this->filtering;
-    }
-
-    /**
-     * @return Paginating
-     */
-    public function getPaginating()
-    {
-        return $this->paginating;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOrderings()
-    {
-        return $this->orderings;
+        return new self(
+            $resourceName,
+            Embeding::fromQueryParameters($queryParameters),
+            Filtering::fromQueryParameters($queryParameters),
+            Orderings::fromQueryParameters($queryParameters),
+            Paginating::fromQueryParameters($queryParameters)
+        );
     }
 }
