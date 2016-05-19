@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>SearchEngine</title>
+
+        <link rel="stylesheet" href="http://gnugat.github.io/search-engine/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/search-engine/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/search-engine/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/search-engine/css/main.css">
+    </head>
+    <body>
+
+        <header class="navbar navbar-default navbar-fixed-top">
+
+            <a class="navbar-brand" href="http://gnugat.github.io/search-engine/">
+                SearchEngine
+                <small class="hidden-xs hidden-sm">
+                    Component that tries to help you get the Query part in CQRS right
+                </small>
+            </a>
+
+                            <a href="https://github.com/gnugat/search-engine">
+                    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+                </a>
+            
+        </header>
+
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/search-engine/">
+                                        Home
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/search-engine/doc/01-implementing.html">
+                                        Implementing
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h1 id="implementing">Implementing</h1>
+<p><code>SearchEngine</code> receives a <code>Criteria</code> which describes how the data should be
+retrieved.</p>
+<p>For example it could ask for all <code>profiles</code>:</p>
+<pre><code class="language-php">$criteria = Criteria::fromQueryParameters('profile', [
+    // Nothing here means "find me everything you can"
+]);</code></pre>
+<p>It could also ask for all purchases for the given <code>profile</code>:</p>
+<pre><code class="language-php">$criteria = Criteria::fromQueryParameters('purchasing', [
+    // `profile_id` is a field we'd like to use as a filter
+    'profile_id' =&gt; '66f856fb-186a-4f2a-8f79-8351ad0fea70',
+]);</code></pre>
+<p><code>SearchEngine</code> returns a <code>Porpaginas\Result</code>, allowing us to choose between getting
+<strong>all</strong> results or a subset of it (paginating):</p>
+<pre><code class="language-php">$result = $searchEngine-&gt;match($criteria);
+
+$allResults = iterator_to_array($result-&gt;getIterator());
+
+$paginatedResults = iterator_to_array($result-&gt;take(
+    $criteria-&gt;paginating-&gt;offset
+    $criteria-&gt;paginating-&gt;itemsPerPage
+)-&gt;getIterator());</code></pre>
+<p>Selecting, Filtering, Ordering and Embeding logic cannot be written directly in
+<code>SearchEngine</code> implementations, otherwise for each new resource or filter we'd
+need to cram more code in them.</p>
+<p>So <code>SearchEngine</code> implementations are likely to follow the <a href="https://en.wikipedia.org/wiki/Strategy_pattern">Strategy design pattern</a>:</p>
+<ul>
+<li>&quot;Strategies&quot; can be registered in it</li>
+<li>when receiving <code>Criteria</code>, <code>SearchEngine</code> will call &quot;Strategies&quot; that support it</li>
+</ul>
+<h2 id="array-implementation-example">Array implementation example</h2>
+<p>The <code>tests</code> directory provides an example of an <code>Array</code> implementation, let's go
+through it:</p>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\SearchEngine\Test\ArrayImplementation;
+
+use Porpaginas\Arrays\ArrayResult;
+use Porpaginas\Result;
+use Gnugat\SearchEngine\{Criteria, SearchEngine};
+
+class ArraySearchEngine implements SearchEngine
+{
+    private $builders = [];
+    private $data;
+
+    public function __construct(array $data)
+    {
+        $this-&gt;data = $data;
+    }
+
+    public function add(Builder $builder, int $priority = 0)
+    {
+        $this-&gt;builders[$priority][] = $builder;
+    }
+
+    public function match(Criteria $criteria) : Result
+    {
+        $data = $this-&gt;data;
+        foreach ($this-&gt;builders as $priority =&gt; $builders) {
+            foreach ($builders as $builder) {
+                if (true === $builder-&gt;supports($criteria)) {
+                    $data = $builder-&gt;build($criteria, $data);
+                }
+            }
+        }
+
+        return new ArrayResult($data);
+    }
+}</code></pre>
+<p>As we can see it doesn't do any logic with <code>Criteria</code>, it entirely relies on
+<code>Buidlers</code>:</p>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\SearchEngine\Test\ArrayImplementation;
+
+use Gnugat\SearchEngine\Criteria;
+
+interface Builder
+{
+    public function supports(Criteria $criteria) : bool;
+    public function build(Criteria $criteria, array $data) : array;
+}</code></pre>
+<p><code>Builder</code> is our &quot;Strategy&quot;, with this the Array implementation is complete:
+filtering a resource by a field or ordering them by IDs in descending order is
+project specific so developers need to create their own <code>Builder</code> implementations.</p>
+<p>For example they could write a <code>Builder</code> that filters &quot;profiles&quot; by &quot;name&quot;:</p>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\SearchEngine\Test\ArrayBuilder;
+
+use Gnugat\SearchEngine\Test\ArrayImplementation\Builder;
+use Gnugat\SearchEngine\Criteria;
+
+class ProfileNameFilteringBuilder implements Builder
+{
+    public function supports(Criteria $criteria) : bool
+    {
+        return 'profile' === $criteria-&gt;resourceName &amp;&amp; isset($criteria-&gt;filtering-&gt;fields['name']);
+    }
+
+    public function build(Criteria $criteria, array $data) : array
+    {
+        $name = $criteria-&gt;filtering-&gt;fields['name'];
+
+        return array_values(array_filter($data, function ($profile) use ($name) {
+            return $name === $profile['name'];
+        }));
+    }
+}</code></pre>
+                </section>
+
+            </div>
+        </main>
+
+        <footer>
+            <div class="container-fluid">
+                <p class="text-muted">
+                    website generated with <a href="http://couscous.io" title="Markdown website generator">Couscous</a>
+                </p>
+            </div>
+        </footer>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>
