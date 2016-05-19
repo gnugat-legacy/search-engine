@@ -21,7 +21,7 @@ a SearchEngine that would try to return results matching a given criteria.
 
 Download SearchEngine using [Composer](https://getcomposer.org/download):
 
-    composer require gnugat/search-engine:^0.2
+    composer require gnugat/search-engine:^0.3
 
 You'll also need to choose one of the following implementations:
 

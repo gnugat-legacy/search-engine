@@ -1,5 +1,19 @@
 # Changes between versions
 
+## 0.3.0: Re-work
+
+> **BC breaks**: Removed everything, dropped support for PHP 5.
+
+* created `Criteria` value object:
+  * created `Filtering` value object
+  * created `Embeding` value object
+  * created `Ordering` value object
+  * created `Orderings` value object
+  * created `Paginating` value object
+* created `SearchEngine` interface
+
+> **Note**: Dependency on [beberlei/porpaginas](https://github.com/beberlei/porpaginas).
+
 ## 0.2.3: PHP 7
 
 * added support for PHP 7
