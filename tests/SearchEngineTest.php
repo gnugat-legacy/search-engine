@@ -52,6 +52,22 @@ class SearchEngineTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_can_find_all()
+    {
+        $criteria = Criteria::fromQueryParameters('profile', [
+        ]);
+        $result = $this->searchEngine->match($criteria);
+        $profiles = iterator_to_array($result->getIterator());
+
+        self::assertSame(
+            self::DATA['profile'],
+            $profiles
+        );
+    }
+
+    /**
+     * @test
+     */
     public function it_can_order()
     {
         $criteria = Criteria::fromQueryParameters('profile', [
